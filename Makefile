@@ -67,7 +67,8 @@ build/%.bin: u-boot-pine64/%.bin
 build/u-boot-sun50iw1p1-with-%-dtb.bin: build/%.dtb u-boot-pine64/u-boot-sun50iw1p1.bin sunxi-pack-tools
 	sunxi-pack-tools/bin/update_uboot_fdt u-boot-pine64/u-boot-sun50iw1p1.bin $< $@
 
-build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/u-boot-sun50iw1p1-with-%-dtb.bin build/bl31.bin build/sys_config.bin sunxi-pack-tools
+build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/u-boot-sun50iw1p1-with-%-dtb.bin \
+		build/bl31.bin build/sys_config.bin sunxi-pack-tools
 	sunxi-pack-tools/bin/merge_uboot $< build/bl31.bin $@.tmp secmonitor
 	sunxi-pack-tools/bin/merge_uboot $@.tmp blobs/scp.bin $@.tmp scp
 	-sunxi-pack-tools/bin/update_uboot $@.tmp build/sys_config.bin
@@ -81,9 +82,26 @@ pine64: build/fes1_sun50iw1p1.bin \
 		build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
 		build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
 
-pinebook_ums: sunxi-tools build/fes1_sun50iw1p1.bin build/u-boot-sun50iw1p1-with-pinebook-dtb.bin
+pinebook_ums: build/fes1_sun50iw1p1.bin \
+		build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
+			sunxi-tools
+
+	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
+	# 0x4A0000e4: is a storage type: EMMC
 	sunxi-tools/sunxi-fel -v spl build/fes1_sun50iw1p1.bin \
 		write-with-progress 0x4A000000 build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
-		writel 0x4A0000e0 0x55 \ # special work mode used to force USB mass storage
-		writel 0x4A0000e4 0x2 \ # storage type: EMMC
+		writel 0x4A0000e0 0x55 \
+		writel 0x4A0000e4 0x2 \
+		exe 0x4A000000
+
+pine64_ums: build/fes1_sun50iw1p1.bin \
+		build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
+			sunxi-tools
+
+	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
+	# 0x4A0000e4: is a storage type: SD card
+	sunxi-tools/sunxi-fel -v spl build/fes1_sun50iw1p1.bin \
+		write-with-progress 0x4A000000 build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
+		writel 0x4A0000e0 0x55 \
+		writel 0x4A0000e4 0x0 \
 		exe 0x4A000000
