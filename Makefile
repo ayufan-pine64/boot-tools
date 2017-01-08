@@ -76,11 +76,13 @@ build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/u-boot-sun50iw1p1-with-%-dt
 
 pinebook: build/fes1_sun50iw1p1.bin \
 		build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
-		build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
+		build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin \
+		boot/pine64/sun50i-a64-pine64-pinebook.dtb
 
 pine64: build/fes1_sun50iw1p1.bin \
 		build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
-		build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
+		build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin \
+		boot/pine64/sun50i-a64-pine64-plus.dtb
 
 pinebook_ums: build/fes1_sun50iw1p1.bin \
 		build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
@@ -105,3 +107,22 @@ pine64_ums: build/fes1_sun50iw1p1.bin \
 		writel 0x4A0000e0 0x55 \
 		writel 0x4A0000e4 0x0 \
 		exe 0x4A000000
+
+boot/pine64:
+	mkdir -p boot/pine64
+
+boot/pine64/sun50i-a64-pine64-pinebook.dtb: blobs/pinebook.dts boot/pine64
+	dtc -Odtb -o $@ $<
+
+boot/pine64/sun50i-a64-pine64-plus.dtb: blobs/pine64.dts boot/pine64
+	dtc -Odtb -o $@ $<
+
+pine64_write: boot blobs/boot0_pine64.bin build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
+		[[ -z "$DISK" ]] && echo "Missing DISK=/dev/diskX" && exit 1
+		dd conv=notrunc bs=1k seek=8 of="$DISK" if=build/boot0_pine64.bin
+		dd conv=notrunc bs=1k seek=19096 of="$DISK" if=build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
+
+pinebook_write: boot blobs/boot0_pinebook.bin build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
+		[[ -z "$DISK" ]] && echo "Missing DISK=/dev/diskX" && exit 1
+		dd conv=notrunc bs=1k seek=8 of="$DISK" if=build/boot0_pinebook.bin
+		dd conv=notrunc bs=1k seek=19096 of="$DISK" if=build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin

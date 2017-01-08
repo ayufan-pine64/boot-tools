@@ -44,13 +44,14 @@ $ make
 4. Compiled binary blobs,
 5. The original `boot0's` in `blobs/` and DTS for Pine A64 and Pinebook.
 
-### Additional info
+### Convert existing images to Pinebook
 
 Here you can also find a compiled boot0 and u-boot (with included dtb)
 which is suitable to be put onto device.
 
 The Pinebook requires you to put a compiled dtb onto first partition
-at `pine64/sun50i-a64-pine64-pinebook.dtb`.
+at `pine64/sun50i-a64-pine64-pinebook.dtb`,
+and copying the `boot/` content to the disk.
 
 ### Author
 
