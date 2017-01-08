@@ -64,14 +64,17 @@ build/%.bin: u-boot-pine64/%.bin
 	mkdir -p build
 	cp $< $@
 
-build/u-boot-sun50iw1p1-with-%-dtb.bin: build/%.dtb u-boot-pine64/u-boot-sun50iw1p1.bin sunxi-pack-tools
-	sunxi-pack-tools/bin/update_uboot_fdt u-boot-pine64/u-boot-sun50iw1p1.bin $< $@
+build/u-boot-sun50iw1p1-with-%-dtb.bin: build/%.dtb u-boot-pine64/u-boot-sun50iw1p1.bin sunxi-pack-tools \
+		build/sys_config.bin sunxi-pack-tools
+	sunxi-pack-tools/bin/update_uboot_fdt u-boot-pine64/u-boot-sun50iw1p1.bin $< $@.tmp
+	sunxi-pack-tools/bin/update_uboot $@.tmp build/sys_config.bin
+	mv $@.tmp $@
 
 build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/u-boot-sun50iw1p1-with-%-dtb.bin \
 		build/bl31.bin build/sys_config.bin sunxi-pack-tools
 	sunxi-pack-tools/bin/merge_uboot $< build/bl31.bin $@.tmp secmonitor
 	sunxi-pack-tools/bin/merge_uboot $@.tmp blobs/scp.bin $@.tmp scp
-	-sunxi-pack-tools/bin/update_uboot $@.tmp build/sys_config.bin
+	sunxi-pack-tools/bin/update_uboot $@.tmp build/sys_config.bin
 	mv $@.tmp $@
 
 pinebook: build/fes1_sun50iw1p1.bin \
