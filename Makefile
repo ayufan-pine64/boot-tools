@@ -9,7 +9,7 @@ help:
 
 sunxi-pack-tools:
 	-rm -rf sunxi-pack-tools.tmp
-	git clone https://github.com/longsleep/sunxi-pack-tools.git sunxi-pack-tools.tmp
+	git clone https://github.com/ayufan-pine64/sunxi-pack-tools.git sunxi-pack-tools.tmp
 	make -C sunxi-pack-tools.tmp
 	mv sunxi-pack-tools.tmp sunxi-pack-tools
 

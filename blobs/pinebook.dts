@@ -2154,7 +2154,7 @@
 			screen0_output_type = <0x1>;
 			screen0_output_mode = <0x4>;
 			screen1_output_type = <0x3>;
-			screen1_output_mode = <0x5>;
+			screen1_output_mode = <0x4>;
 			fb0_format = <0x0>;
 			fb0_width = <0x0>;
 			fb0_height = <0x0>;
