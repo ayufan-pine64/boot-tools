@@ -2892,6 +2892,16 @@
 			card_line = <0x8>;
 			pinctrl-0 = <0x9a>;
 			sdc_ex_dly_used = <0x2>;
+			tm4_smx_fx_0 = <0x00000000>;
+			tm4_smx_fx_1 = <0x00000000>;
+			tm4_smx_fx_2 = <0x002fffff>;
+			tm4_smx_fx_3 = <0x00000000>;
+			tm4_smx_fx_4 = <0x000dffff>;
+			tm4_smx_fx_5 = <0x00000000>;
+			tm4_smx_fx_6 = <0x0d2fffff>;
+			tm4_smx_fx_7 = <0x00000b2d>;
+			tm4_smx_fx_8 = <0x00000000>;
+			tm4_smx_fx_9 = <0x00000000>;
 		};
 
 		twi_para {
