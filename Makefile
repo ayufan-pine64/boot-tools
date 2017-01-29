@@ -24,12 +24,12 @@ build/%.dtb: blobs/%.dts
 	mkdir -p build
 	dtc -Odtb -o $@ $<
 
-build/sys_config.fex: blobs/sys_config.fex
+build/%.fex: blobs/%.fex
 	mkdir -p build
 	cp $< $@
 	unix2dos $@
 
-build/sys_config.bin: build/sys_config.fex sunxi-pack-tools
+build/sys_config_%.bin: build/sys_config_%.fex sunxi-pack-tools
 	sunxi-pack-tools/bin/script $<
 
 arm-trusted-firmware-pine64:
@@ -59,66 +59,76 @@ u-boot-pine64/u-boot-sun50iw1p1.bin: u-boot-pine64/config.mk
 	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -j
 
 u-boot-pine64/fes1_sun50iw1p1.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin: u-boot-pine64/config.mk
-	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- spl -j
+	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- spl
 
-build/%.bin: u-boot-pine64/%.bin
-	mkdir -p build
-	cp $< $@
+build/boot0_%.bin: build/sys_config_%.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
+	cp u-boot-pine64/boot0_sdcard_sun50iw1p1.bin $@.tmp
+	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
+	mv $@.tmp $@
+
+build/fes1_%.bin: build/sys_config_%.bin u-boot-pine64/fes1_sun50iw1p1.bin
+	cp u-boot-pine64/fes1_sun50iw1p1.bin $@.tmp
+	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
+	mv $@.tmp $@
 
 build/u-boot-sun50iw1p1-with-%-dtb.bin: build/%.dtb u-boot-pine64/u-boot-sun50iw1p1.bin sunxi-pack-tools \
-		build/sys_config.bin sunxi-pack-tools
+		build/sys_config_uboot.bin sunxi-pack-tools
 	sunxi-pack-tools/bin/update_uboot_fdt u-boot-pine64/u-boot-sun50iw1p1.bin $< $@.tmp
-	sunxi-pack-tools/bin/update_uboot $@.tmp build/sys_config.bin
+	sunxi-pack-tools/bin/update_uboot $@.tmp build/sys_config_uboot.bin
 	mv $@.tmp $@
 
-build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/u-boot-sun50iw1p1-with-%-dtb.bin \
-		build/bl31.bin build/sys_config.bin sunxi-pack-tools
-	sunxi-pack-tools/bin/merge_uboot $< build/bl31.bin $@.tmp secmonitor
-	sunxi-pack-tools/bin/merge_uboot $@.tmp blobs/scp.bin $@.tmp scp
-	sunxi-pack-tools/bin/update_uboot $@.tmp build/sys_config.bin
-	mv $@.tmp $@
+build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/%.dtb u-boot-pine64/u-boot-sun50iw1p1.bin \
+		build/bl31.bin blobs/scp.bin build/sys_config_uboot.bin sunxi-pack-tools
+	sunxi-pack-tools/bin/merge_uboot u-boot-pine64/u-boot-sun50iw1p1.bin build/bl31.bin $@.tmp secmonitor
+	sunxi-pack-tools/bin/merge_uboot $@.tmp blobs/scp.bin $@.tmp2 scp
+	sunxi-pack-tools/bin/update_uboot_fdt $@.tmp2 $< $@.tmp3
+	sunxi-pack-tools/bin/update_uboot $@.tmp3 build/sys_config_uboot.bin
+	mv $@.tmp3 $@
+	rm $@.tmp $@.tmp2
 
-pinebook: build/fes1_sun50iw1p1.bin \
+pinebook: build/boot0_pinebook.bin \
+		build/fes1_pinebook.bin \
 		build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
 		build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin \
 		boot/pine64/sun50i-a64-pine64-pinebook.dtb
 
-pine64: build/fes1_sun50iw1p1.bin \
+pine64: build/boot0_pine64.bin \
+		build/fes1_pine64.bin \
 		build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
 		build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin \
 		boot/pine64/sun50i-a64-pine64-plus.dtb
 
-pinebook_ums: build/fes1_sun50iw1p1.bin \
+pinebook_ums: build/fes1_pinebook.bin \
 		build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
 			sunxi-tools
 
 	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
 	# 0x4A0000e4: is a storage type: EMMC
-	sunxi-tools/sunxi-fel -v spl build/fes1_sun50iw1p1.bin \
+	sunxi-tools/sunxi-fel -v spl build/fes1_pinebook.bin \
 		write-with-progress 0x4A000000 build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
 		writel 0x4A0000e0 0x55 \
 		writel 0x4A0000e4 0x2 \
 		exe 0x4A000000
 
-pinebook_boot: build/fes1_sun50iw1p1.bin \
+pinebook_boot: build/fes1_pinebook.bin \
 		build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
 			sunxi-tools
 
 	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
 	# 0x4A0000e4: is a storage type: EMMC
-	sunxi-tools/sunxi-fel -v spl build/fes1_sun50iw1p1.bin \
+	sunxi-tools/sunxi-fel -v spl build/fes1_pinebook.bin \
 		write-with-progress 0x4A000000 build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
 		writel 0x4A0000e0 0x0 \
 		writel 0x4A0000e4 0x2 \
 		exe 0x4A000000
 
-pine64_ums: build/fes1_sun50iw1p1.bin \
+pine64_ums: build/fes1_pine64.bin \
 		build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
 			sunxi-tools
 
 	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
 	# 0x4A0000e4: is a storage type: SD card
-	sunxi-tools/sunxi-fel -v spl build/fes1_sun50iw1p1.bin \
+	sunxi-tools/sunxi-fel -v spl build/fes1_pine64.bin \
 		write-with-progress 0x4A000000 build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
 		writel 0x4A0000e0 0x55 \
 		writel 0x4A0000e4 0x0 \
@@ -133,15 +143,15 @@ boot/pine64/sun50i-a64-pine64-pinebook.dtb: blobs/pinebook.dts boot/pine64
 boot/pine64/sun50i-a64-pine64-plus.dtb: blobs/pine64.dts boot/pine64
 	dtc -Odtb -o $@ $<
 
-pine64_write: boot blobs/boot0_pine64.bin build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
+pine64_write: boot build/boot0_pine64.bin build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
 	@if [[ -z "$(DISK)" ]]; then echo "Missing DISK, use: make pine64_write DISK=/dev/diskX"; exit 1; fi
-	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=blobs/boot0_pine64.bin
+	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=build/boot0_pine64.bin
 	sudo dd conv=notrunc bs=1k seek=19096 of="$(DISK)" if=build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
 	cd boot/ && sudo mcopy -v -s -m -i $(DISK)?1 * ::
 
-pinebook_write: boot blobs/boot0_pinebook.bin build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
+pinebook_write: boot build/boot0_pinebook.bin build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
 	@if [ -z "$(DISK)" ]; then echo "Missing DISK, use: make pinebook_write DISK=/dev/diskX"; exit 1; fi
-	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=blobs/boot0_pinebook.bin
+	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=build/boot0_pinebook.bin
 	sudo dd conv=notrunc bs=1k seek=19096 of="$(DISK)" if=build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
 	cd boot/ && sudo mcopy -v -s -m -i $(DISK)?1 * ::
 
