@@ -6,6 +6,7 @@ help:
 	# make pinebook
 	# make pine64
 	# make pinebook_ums
+	# make clean
 
 sunxi-pack-tools:
 	-rm -rf sunxi-pack-tools.tmp
@@ -99,6 +100,18 @@ pinebook_ums: build/fes1_sun50iw1p1.bin \
 		writel 0x4A0000e4 0x2 \
 		exe 0x4A000000
 
+pinebook_boot: build/fes1_sun50iw1p1.bin \
+		build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
+			sunxi-tools
+
+	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
+	# 0x4A0000e4: is a storage type: EMMC
+	sunxi-tools/sunxi-fel -v spl build/fes1_sun50iw1p1.bin \
+		write-with-progress 0x4A000000 build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
+		writel 0x4A0000e0 0x0 \
+		writel 0x4A0000e4 0x2 \
+		exe 0x4A000000
+
 pine64_ums: build/fes1_sun50iw1p1.bin \
 		build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
 			sunxi-tools
@@ -131,3 +144,8 @@ pinebook_write: boot blobs/boot0_pinebook.bin build/u-boot-sun50iw1p1-secure-wit
 	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=blobs/boot0_pinebook.bin
 	sudo dd conv=notrunc bs=1k seek=19096 of="$(DISK)" if=build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
 	cd boot/ && sudo mcopy -v -s -m -i $(DISK)?1 * ::
+
+clean:
+	rm -r -f build \
+		arm-trusted-firmware-pine64 \
+		u-boot-pine64
