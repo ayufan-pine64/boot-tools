@@ -56,7 +56,7 @@ u-boot-pine64/config.mk: u-boot-pine64/include/configs/sun50iw1p1.h
 	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- sun50iw1p1_config
 
 u-boot-pine64/u-boot-sun50iw1p1.bin: u-boot-pine64/config.mk
-	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -j
+	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
 
 u-boot-pine64/fes1_sun50iw1p1.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin: u-boot-pine64/config.mk
 	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- spl
