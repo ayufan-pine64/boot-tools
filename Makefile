@@ -145,15 +145,17 @@ boot/pine64/sun50i-a64-pine64-plus.dtb: blobs/pine64.dts boot/pine64
 
 pine64_write: boot build/boot0_pine64.bin build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
 	@if [[ -z "$(DISK)" ]]; then echo "Missing DISK, use: make pine64_write DISK=/dev/diskX"; exit 1; fi
+	-sudo umount $(DISK)*
 	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=build/boot0_pine64.bin
 	sudo dd conv=notrunc bs=1k seek=19096 of="$(DISK)" if=build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
-	cd boot/ && sudo mcopy -v -s -m -i $(DISK)?1 * ::
+	cd boot/ && sudo mcopy -n -v -s -m -i $(DISK)?1 * ::
 
 pinebook_write: boot build/boot0_pinebook.bin build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
 	@if [ -z "$(DISK)" ]; then echo "Missing DISK, use: make pinebook_write DISK=/dev/diskX"; exit 1; fi
+	-sudo umount $(DISK)*
 	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=build/boot0_pinebook.bin
 	sudo dd conv=notrunc bs=1k seek=19096 of="$(DISK)" if=build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
-	cd boot/ && sudo mcopy -v -s -m -i $(DISK)?1 * ::
+	cd boot/ && sudo mcopy -n -v -s -m -i $(DISK)?1 * ::
 
 clean:
 	rm -r -f build \
