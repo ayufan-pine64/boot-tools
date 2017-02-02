@@ -2151,8 +2151,8 @@
 			device_type = "disp";
 			disp_init_enable = <0x1>;
 			disp_mode = <0x0>;
-			screen0_output_type = <0x3>;
-			screen0_output_mode = <0xa>;
+			screen0_output_type = <0x1>;
+			screen0_output_mode = <0x4>;
 			screen1_output_type = <0x3>;
 			screen1_output_mode = <0xa>;
 			fb0_format = <0x0>;
