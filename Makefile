@@ -33,7 +33,7 @@ build/sys_config_%.bin: build/sys_config_%.fex sunxi-pack-tools
 	sunxi-pack-tools/bin/script $<
 
 arm-trusted-firmware-pine64:
-	git clone --branch allwinner-a64-bsp --single-branch https://github.com/longsleep/arm-trusted-firmware.git arm-trusted-firmware-pine64
+	git clone --depth=1 --single-branch https://github.com/ayufan-pine64/arm-trusted-firmware-pine64.git
 
 arm-trusted-firmware-pine64/build/sun50iw1p1/release/bl31.bin: arm-trusted-firmware-pine64
 	make -C arm-trusted-firmware-pine64 clean
@@ -48,7 +48,7 @@ build/bl31.bin: arm-trusted-firmware-pine64/build/sun50iw1p1/$(ATF_BUILD)/bl31.b
 	cp $< $@
 
 u-boot-pine64:
-	git clone --depth 1 --branch pine64-usb-mass-storage --single-branch https://github.com/ayufan-pine64/u-boot-pine64.git u-boot-pine64
+	git clone --depth 1 --single-branch https://github.com/ayufan-pine64/u-boot-pine64.git
 
 u-boot-pine64/include/configs/sun50iw1p1.h: u-boot-pine64
 
