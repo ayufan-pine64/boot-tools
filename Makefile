@@ -44,7 +44,11 @@ arm-trusted-firmware-pine64/build/sun50iw1p1/debug/bl31.bin: arm-trusted-firmwar
 	make -C arm-trusted-firmware-pine64 clean
 	make -C arm-trusted-firmware-pine64 ARCH=arm CROSS_COMPILE=aarch64-linux-gnu- PLAT=sun50iw1p1 DEBUG=1 bl31
 
-build/bl31.bin: arm-trusted-firmware-pine64/build/sun50iw1p1/$(ATF_BUILD)/bl31.bin
+#build/bl31.bin: arm-trusted-firmware-pine64/build/sun50iw1p1/$(ATF_BUILD)/bl31.bin
+#	mkdir -p build
+#	cp $< $@
+
+build/bl31.bin: blobs/bl31.bin
 	mkdir -p build
 	cp $< $@
 
