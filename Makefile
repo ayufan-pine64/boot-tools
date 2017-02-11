@@ -61,10 +61,10 @@ u-boot-pine64/u-boot-sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
 u-boot-pine64/fes1_sun50iw1p1.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
 	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- spl
 
-#build/boot0_%.bin: build/sys_config_%.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
-#	cp u-boot-pine64/boot0_sdcard_sun50iw1p1.bin $@.tmp
-#	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
-#	mv $@.tmp $@
+build/boot0_%.bin: build/sys_config_%.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
+	cp u-boot-pine64/boot0_sdcard_sun50iw1p1.bin $@.tmp
+	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
+	mv $@.tmp $@
 
 build/fes1_%.bin: build/sys_config_%.bin u-boot-pine64/fes1_sun50iw1p1.bin
 	cp u-boot-pine64/fes1_sun50iw1p1.bin $@.tmp
