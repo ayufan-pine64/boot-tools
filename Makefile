@@ -91,13 +91,17 @@ pinebook: build/boot0_pinebook.bin \
 		build/fes1_pinebook.bin \
 		build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
 		build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin \
-		boot/pine64/sun50i-a64-pine64-pinebook.dtb
+		boot/pine64/sun50i-a64-pine64-pinebook.dtb \
+		boot/boot.scr \
+		boot/uEnv.txt
 
 pine64: build/boot0_pine64.bin \
 		build/fes1_pine64.bin \
 		build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
 		build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin \
-		boot/pine64/sun50i-a64-pine64-plus.dtb
+		boot/pine64/sun50i-a64-pine64-plus.dtb \
+		boot/boot.scr \
+		boot/uEnv.txt
 
 pinebook_ums: build/fes1_pinebook.bin \
 		build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
@@ -143,6 +147,12 @@ boot/pine64/sun50i-a64-pine64-pinebook.dtb: blobs/pinebook.dts boot/pine64
 
 boot/pine64/sun50i-a64-pine64-plus.dtb: blobs/pine64.dts boot/pine64
 	dtc -Odtb -o $@ $<
+
+boot/boot.scr: blobs/boot.cmd
+	mkimage -C none -A arm -T script -d $< $@
+
+boot/uEnv.txt: blobs/uEnv.txt
+	cp $< $@
 
 pine64_write: boot build/boot0_pine64.bin build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
 	@if [[ -z "$(DISK)" ]]; then echo "Missing DISK, use: make pine64_write DISK=/dev/diskX"; exit 1; fi
