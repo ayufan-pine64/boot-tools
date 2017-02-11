@@ -1,5 +1,5 @@
 ATF_BUILD := release
-BRANCH := new-bsp
+BRANCH := master
 
 all: pinebook pine64
 
