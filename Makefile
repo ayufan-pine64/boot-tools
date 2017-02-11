@@ -1,4 +1,5 @@
 ATF_BUILD := release
+BRANCH := new-bsp
 
 all: pinebook pine64
 
@@ -10,7 +11,7 @@ help:
 
 sunxi-pack-tools:
 	-rm -rf sunxi-pack-tools.tmp
-	git clone https://github.com/ayufan-pine64/sunxi-pack-tools.git sunxi-pack-tools.tmp
+	git clone --depth=1 --single-branch --branch=$(BRANCH) https://github.com/ayufan-pine64/sunxi-pack-tools.git sunxi-pack-tools.tmp
 	make -C sunxi-pack-tools.tmp
 	mv sunxi-pack-tools.tmp sunxi-pack-tools
 
@@ -48,7 +49,7 @@ build/bl31.bin: arm-trusted-firmware-pine64/build/sun50iw1p1/$(ATF_BUILD)/bl31.b
 	cp $< $@
 
 u-boot-pine64:
-	git clone --depth 1 --single-branch https://github.com/ayufan-pine64/u-boot-pine64.git
+	git clone --depth 1 --single-branch --branch=$(BRANCH) https://github.com/ayufan-pine64/u-boot-pine64.git
 
 u-boot-pine64/include/configs/sun50iw1p1.h: u-boot-pine64
 
@@ -160,4 +161,5 @@ pinebook_write: boot build/boot0_pinebook.bin build/u-boot-sun50iw1p1-secure-wit
 clean:
 	rm -r -f build \
 		arm-trusted-firmware-pine64 \
-		u-boot-pine64
+		u-boot-pine64 \
+		sunxi-pack-tools
