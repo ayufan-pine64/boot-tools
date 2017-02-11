@@ -29,9 +29,10 @@ $ make pine64_ums
 ### How to recompile everything?
 
 ```bash
+$ sudo apt-get install -y {g++,gcc}-4.9-aarch64-linux-gnu {g++,gcc}-4.7-arm-linux-gnueabihf
 $ git clone https://github.com/ayufan-pine64/boot-tools.git
 $ cd boot-tools
-$ rm -rf build
+$ make clean
 $ make
 ```
 
