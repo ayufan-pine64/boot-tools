@@ -89,6 +89,18 @@ if test "${camera_type}" = "ov5640"; then
 	fdt set /soc@01c00000/vfe@0/dev@0/ status "okay"
 fi
 
+# set otg mode
+if test "${otg_mode}" == "device"; then
+	echo "USB-OTG port is in device mode"
+	fdt set /soc@01c00000/usbc0@0 usb_port_type "<0x00000000>"
+elif test "${otg_mode}" == "host"; then
+	echo "USB-OTG port is in host mode"
+	fdt set /soc@01c00000/usbc0@0 usb_port_type "<0x00000001>"
+elif test "${otg_mode}" == "otg"; then
+	echo "USB-OTG port is in OTG mode"
+	fdt set /soc@01c00000/usbc0@0 usb_port_type "<0x00000002>"
+fi
+
 run load_dtb
 
 if test "${boot_part}" = ""; then
