@@ -3,30 +3,30 @@ version = "100"
 
 [dram_para]
 ; params for double face
-dram_clk        = 552
-dram_type       = 3
-dram_zq         = 0x3b3bbb
+dram_clk        = 408
+dram_type       = 7
+dram_zq         = 0x3939b9
 dram_odt_en     = 0x1
 dram_para1      = 0x10e410f4
 dram_para2      = 0x8001000
-dram_mr0        = 0x1c70
-dram_mr1        = 0x40
-dram_mr2        = 0x18
+dram_mr0        = 0x0
+dram_mr1        = 0xc3
+dram_mr2        = 0xa
 dram_mr3        = 0x2
-dram_tpr0       = 0x47194f
-dram_tpr1       = 0x1c2414b
-dram_tpr2       = 0x61043
-dram_tpr3       = 0x4b005dc
+dram_tpr0       = 0x45994f
+dram_tpr1       = 0x1212189
+dram_tpr2       = 0x2b018
+dram_tpr3       = 0x50005dc
 dram_tpr4       = 0x0
 dram_tpr5       = 0x0
 dram_tpr6       = 0x0
-dram_tpr7       = 0x0
+dram_tpr7       = 0x2a066198
 dram_tpr8       = 0x0
 dram_tpr9       = 0x0
-dram_tpr10      = 0x8808
-dram_tpr11      = 0x20250000
-dram_tpr12      = 0x0
-dram_tpr13      = 0x4000803
+dram_tpr10      = 0x446f
+dram_tpr11      = 0x18634a8
+dram_tpr12      = 0x88770000
+dram_tpr13      = 0x84000903
 
 [card0_boot_para]
 card_ctrl       = 0
