@@ -3,7 +3,7 @@ version = "100"
 
 [dram_para]
 ; params for double face
-dram_clk        = 408
+dram_clk        = 552
 dram_type       = 7
 dram_zq         = 0x3939b9
 dram_odt_en     = 0x1
