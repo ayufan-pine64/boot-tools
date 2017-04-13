@@ -38,11 +38,11 @@ arm-trusted-firmware-pine64:
 
 arm-trusted-firmware-pine64/build/sun50iw1p1/release/bl31.bin: arm-trusted-firmware-pine64
 	make -C arm-trusted-firmware-pine64 clean
-	make -C arm-trusted-firmware-pine64 ARCH=arm CROSS_COMPILE=aarch64-linux-gnu- PLAT=sun50iw1p1 bl31
+	make -C arm-trusted-firmware-pine64 ARCH=arm CROSS_COMPILE="ccache aarch64-linux-gnu-" PLAT=sun50iw1p1 bl31
 
 arm-trusted-firmware-pine64/build/sun50iw1p1/debug/bl31.bin: arm-trusted-firmware-pine64
 	make -C arm-trusted-firmware-pine64 clean
-	make -C arm-trusted-firmware-pine64 ARCH=arm CROSS_COMPILE=aarch64-linux-gnu- PLAT=sun50iw1p1 DEBUG=1 bl31
+	make -C arm-trusted-firmware-pine64 ARCH=arm CROSS_COMPILE="ccache aarch64-linux-gnu-" PLAT=sun50iw1p1 DEBUG=1 bl31
 
 #build/bl31.bin: arm-trusted-firmware-pine64/build/sun50iw1p1/$(ATF_BUILD)/bl31.bin
 #	mkdir -p build
@@ -58,13 +58,13 @@ u-boot-pine64:
 u-boot-pine64/include/configs/sun50iw1p1.h: u-boot-pine64
 
 u-boot-pine64/include/autoconf.mk: u-boot-pine64/include/configs/sun50iw1p1.h
-	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- sun50iw1p1_config
+	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-" sun50iw1p1_config
 
 u-boot-pine64/u-boot-sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
-	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi-
+	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-"
 
 u-boot-pine64/fes1_sun50iw1p1.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
-	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- spl
+	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-" spl
 
 build/boot0_%.bin: build/sys_config_%.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
 	cp u-boot-pine64/boot0_sdcard_sun50iw1p1.bin $@.tmp
