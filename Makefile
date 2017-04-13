@@ -24,7 +24,7 @@ sunxi-tools:
 	make -C sunxi-tools.tmp
 	mv sunxi-tools.tmp sunxi-tools
 
-build/%_uboot.dtb: blobs/%.dts
+build/%_uboot.dtb: blobs/%_uboot.dts
 	mkdir -p build
 	dtc -Odtb -o $@ $<
 
