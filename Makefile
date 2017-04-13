@@ -1,6 +1,9 @@
 ATF_BUILD := release
 BRANCH := master
 
+KERNEL_DIR := /home/jenkins/linux-pine64
+DTS_DIR := $(KERNEL_DIR)/arch/arm64/boot/dts
+
 all: pinebook pine64
 
 help:
@@ -21,7 +24,7 @@ sunxi-tools:
 	make -C sunxi-tools.tmp
 	mv sunxi-tools.tmp sunxi-tools
 
-build/%.dtb: blobs/%.dts
+build/%_uboot.dtb: blobs/%.dts
 	mkdir -p build
 	dtc -Odtb -o $@ $<
 
@@ -44,9 +47,9 @@ arm-trusted-firmware-pine64/build/sun50iw1p1/debug/bl31.bin: arm-trusted-firmwar
 	make -C arm-trusted-firmware-pine64 clean
 	make -C arm-trusted-firmware-pine64 ARCH=arm CROSS_COMPILE="ccache aarch64-linux-gnu-" PLAT=sun50iw1p1 DEBUG=1 bl31
 
-#build/bl31.bin: arm-trusted-firmware-pine64/build/sun50iw1p1/$(ATF_BUILD)/bl31.bin
-#	mkdir -p build
-#	cp $< $@
+build/bl31.bin: arm-trusted-firmware-pine64/build/sun50iw1p1/$(ATF_BUILD)/bl31.bin
+	mkdir -p build
+	cp $< $@
 
 build/bl31.bin: blobs/bl31.bin
 	mkdir -p build
@@ -64,7 +67,7 @@ u-boot-pine64/u-boot-sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
 	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-"
 
 u-boot-pine64/fes1_sun50iw1p1.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
-	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-" spl
+	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="arm-linux-gnueabi-" spl
 
 build/boot0_%.bin: build/sys_config_%.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
 	cp u-boot-pine64/boot0_sdcard_sun50iw1p1.bin $@.tmp
@@ -146,11 +149,25 @@ pine64_ums: build/fes1_pine64.bin \
 boot/pine64:
 	mkdir -p boot/pine64
 
-boot/pine64/sun50i-a64-pine64-pinebook.dtb: blobs/pinebook.dts boot/pine64
-	dtc -Odtb -o $@ $<
+build/%.dtb.dts: $(DTS_DIR)/%.dts $(wildcard $(DTS_DIR)/*.dts*)
+	$(CROSS_COMPILE)gcc -E -nostdinc -I$(DTS_DIR) -I$(KERNEL_DIR)/include -D__DTS__  -x assembler-with-cpp -o $@.tmp $<
+	mv $@.tmp $@
 
-boot/pine64/sun50i-a64-pine64-plus.dtb: blobs/pine64.dts boot/pine64
-	dtc -Odtb -o $@ $<
+build/sys_config_%.fex.fix: blobs/sys_config_%.fex
+	sed -e "s/\(\[dram\)_para\(\]\)/\1\2/g" \
+		-e "s/\(\[nand[0-9]\)_para\(\]\)/\1\2/g" $< > $@.tmp
+	mv $@.tmp $@
+
+build/%_linux.dtb: build/sys_config_%.fex.fix build/sun50iw1p1-soc.dtb.dts
+	$(KERNEL_DIR)/scripts/dtc/dtc -O dtb -o $@ \
+		-F $< \
+		build/sun50iw1p1-soc.dtb.dts
+
+boot/pine64/sun50i-a64-pine64-pinebook.dtb: build/pinebook_linux.dtb
+	cp $< $@
+
+boot/pine64/sun50i-a64-pine64-plus.dtb: build/pine64_linux.dtb
+	cp $< $@
 
 boot/boot.scr: blobs/boot.cmd
 	mkimage -C none -A arm -T script -d $< $@
