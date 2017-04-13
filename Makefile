@@ -1,7 +1,7 @@
 ATF_BUILD := release
 BRANCH := master
 
-KERNEL_DIR := /home/jenkins/linux-pine64
+KERNEL_DIR := linux
 DTS_DIR := $(KERNEL_DIR)/arch/arm64/boot/dts
 
 all: pinebook pine64
@@ -67,7 +67,13 @@ u-boot-pine64/u-boot-sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
 	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-"
 
 u-boot-pine64/fes1_sun50iw1p1.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
-	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="arm-linux-gnueabi-" spl
+	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-" spl
+
+linux:
+	git clone --depth 1 --single-branch --branch=$(BRANCH) https://github.com/ayufan-pine64/linux-pine64.git linux
+
+linux/.config: linux
+	make -C linux ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-" sun50iw1p1smp_linux_defconfig
 
 build/boot0_%.bin: build/sys_config_%.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
 	cp u-boot-pine64/boot0_sdcard_sun50iw1p1.bin $@.tmp
