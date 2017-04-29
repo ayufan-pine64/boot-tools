@@ -75,6 +75,11 @@ linux:
 linux/.config: linux
 	make -C linux ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-" sun50iw1p1smp_linux_defconfig
 
+linux/scripts/dtc/dtc: linux/.config
+	make -C linux ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-" scripts/dtc/
+
+linux/arch/arm64/boot/dts/sun50iw1p1-soc.dts: linux
+
 build/boot0_%.bin: build/sys_config_%.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
 	cp u-boot-pine64/boot0_sdcard_sun50iw1p1.bin $@.tmp
 	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
@@ -164,7 +169,7 @@ build/sys_config_%.fex.fix: blobs/sys_config_%.fex
 		-e "s/\(\[nand[0-9]\)_para\(\]\)/\1\2/g" $< > $@.tmp
 	mv $@.tmp $@
 
-build/%_linux.dtb: build/sys_config_%.fex.fix build/sun50iw1p1-soc.dtb.dts
+build/%_linux.dtb: build/sys_config_%.fex.fix $(KERNEL_DIR)/scripts/dtc/dtc build/sun50iw1p1-soc.dtb.dts
 	$(KERNEL_DIR)/scripts/dtc/dtc -O dtb -o $@ \
 		-F $< \
 		build/sun50iw1p1-soc.dtb.dts
