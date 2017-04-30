@@ -1354,7 +1354,7 @@ pmu_irq_id                 = 64
 pmu_IRQ_wakeup             = 1
 
 pmu_chg_ic_temp            = 0
-pmu_battery_rdc            = 110
+pmu_battery_rdc            = 121
 pmu_battery_cap            = 10204
 pmu_runtime_chgcur         = 1800
 pmu_suspend_chgcur         = 1500
