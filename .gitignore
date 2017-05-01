@@ -3,8 +3,5 @@ sunxi-tools/
 arm-trusted-firmware-pine64/
 u-boot-pine64/
 *.tmp
-build/*.fex
+/build
 /linux
-build/*.fix
-build/*.dts
-

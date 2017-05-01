@@ -1,13 +1,13 @@
-ATF_BUILD := debug
-BRANCH ?= my-hacks-3.0
+ATF_BUILD := release
+BRANCH ?= my-hacks-1.2
 LINUX_DIR := linux
 DTS_DIR := $(LINUX_DIR)/arch/arm64/boot/dts
 
-all: pinebook pine64
+all: pine64-pinebook pine64-plus
 
 help:
-	# make pinebook
-	# make pine64
+	# make pine64-pinebook
+	# make pine64-plus
 	# make pinebook_ums
 	# make clean
 
@@ -50,9 +50,9 @@ build/bl31.bin: arm-trusted-firmware-pine64/build/sun50iw1p1/$(ATF_BUILD)/bl31.b
 	mkdir -p build
 	cp $< $@
 
-build/bl31.bin: blobs/bl31.bin
-	mkdir -p build
-	cp $< $@
+# build/bl31.bin: blobs/bl31.bin
+# 	mkdir -p build
+# 	cp $< $@
 
 .PHONY: bl31
 bl31: build/bl31.bin
@@ -78,7 +78,6 @@ u-boot-pine64/u-boot-sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
 
 u-boot-pine64/fes1_sun50iw1p1.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
 	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-" spl
-	ls -al u-boot-pine64/fes1_sun50iw1p1.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
 
 .PHONY: uboot
 uboot: u-boot-pine64/u-boot-sun50iw1p1.bin
@@ -114,27 +113,27 @@ build/%_linux.dtb: build/sys_config_%.fex.fix build/sun50iw1p1-soc.dtb.dts $(LIN
 		-F $< \
 		build/sun50iw1p1-soc.dtb.dts
 
-build/boot0_%.bin: build/sys_config_%.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
+build/boot0-%.bin: build/sys_config_%.bin blobs/boot0.bin
 	echo Blob needs to be at most 32KB && \
-		test $(shell stat -c%s u-boot-pine64/boot0_sdcard_sun50iw1p1.bin) -le 32768
-	cp u-boot-pine64/boot0_sdcard_sun50iw1p1.bin $@.tmp
+		test $(shell stat -c%s blobs/boot0.bin) -le 32768
+	cp blobs/boot0.bin $@.tmp
 	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
 	mv $@.tmp $@
 
-build/fes1_%.bin: build/sys_config_%.bin u-boot-pine64/fes1_sun50iw1p1.bin
+build/fes1-%.bin: build/sys_config_%.bin u-boot-pine64/fes1_sun50iw1p1.bin
 	echo Blob needs to be at most 32KB && \
 		test $(shell stat -c%s u-boot-pine64/fes1_sun50iw1p1.bin) -le 32768
 	cp u-boot-pine64/fes1_sun50iw1p1.bin $@.tmp
 	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
 	mv $@.tmp $@
 
-build/u-boot-sun50iw1p1-with-%-dtb.bin: build/%_uboot.dtb u-boot-pine64/u-boot-sun50iw1p1.bin sunxi-pack-tools \
+build/u-boot-sun50iw1p1-with-%-dtb.bin: build/%-uboot.dtb u-boot-pine64/u-boot-sun50iw1p1.bin sunxi-pack-tools \
 		build/sys_config_uboot.bin sunxi-pack-tools
 	sunxi-pack-tools/bin/update_uboot_fdt u-boot-pine64/u-boot-sun50iw1p1.bin $< $@.tmp
 	sunxi-pack-tools/bin/update_uboot $@.tmp build/sys_config_uboot.bin
 	mv $@.tmp $@
 
-build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/%_uboot.dtb u-boot-pine64/u-boot-sun50iw1p1.bin \
+build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/%-uboot.dtb u-boot-pine64/u-boot-sun50iw1p1.bin \
 		build/bl31.bin blobs/scp.bin build/sys_config_uboot.bin sunxi-pack-tools
 	sunxi-pack-tools/bin/merge_uboot u-boot-pine64/u-boot-sun50iw1p1.bin build/bl31.bin $@.tmp secmonitor
 	sunxi-pack-tools/bin/merge_uboot $@.tmp blobs/scp.bin $@.tmp2 scp
@@ -143,22 +142,23 @@ build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/%_uboot.dtb u-boot-pine64/u
 	mv $@.tmp3 $@
 	rm $@.tmp $@.tmp2
 
-.PHONY: pinebook
-pinebook: build/boot0_pinebook.bin \
-		build/fes1_pinebook.bin \
-		build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
-		build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin \
+.PHONY: pine64-pinebook
+pine64-pinebook: \
 		boot/pine64/sun50i-a64-pine64-pinebook.dtb \
+		boot/pine64/boot0-pine64-pinebook.bin \
+		boot/pine64/fes1-pine64-pinebook.bin \
+		boot/pine64/u-boot-pine64-pinebook.bin \
 		boot/boot.scr \
+		boot/boot.cmd \
 		boot/uEnv.txt
 
 .PHONY: pine64
-pine64: build/boot0_pine64.bin \
-		build/fes1_pine64.bin \
-		build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
-		build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin \
-		boot/pine64/sun50i-a64-pine64-plus.dtb \
+pine64-plus: boot/pine64/sun50i-a64-pine64-plus.dtb \
+		boot/pine64/boot0-pine64-plus.bin \
+		boot/pine64/fes1-pine64-plus.bin \
+		boot/pine64/u-boot-pine64-plus.bin \
 		boot/boot.scr \
+		boot/boot.cmd \
 		boot/uEnv.txt
 
 .PHONY: pinebook_ums
@@ -171,22 +171,12 @@ pinebook_ums: sunxi-tools
 		writel 0x4A0000e4 0x2 \
 		exe 0x4A000000
 
-.PHONY: pinebook_boot
-pinebook_boot: sunxi-tools
-	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
-	# 0x4A0000e4: is a storage type: EMMC
-	sunxi-tools/sunxi-fel -v spl build/fes1_pinebook.bin \
-		write-with-progress 0x4A000000 build/u-boot-sun50iw1p1-with-pinebook-dtb.bin \
-		writel 0x4A0000e0 0x0 \
-		writel 0x4A0000e4 0x2 \
-		exe 0x4A000000
-
 .PHONY: pine64_ums
 pine64_ums: sunxi-tools
 	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
 	# 0x4A0000e4: is a storage type: SD card
-	sunxi-tools/sunxi-fel -v spl build/fes1_pine64.bin \
-		write-with-progress 0x4A000000 build/u-boot-sun50iw1p1-with-pine64-dtb.bin \
+	sunxi-tools/sunxi-fel -v spl boot/pine64/fes1-pine64-plus.bin \
+		write-with-progress 0x4A000000 boot/pine64/u-boot-pine64-plus.bin \
 		writel 0x4A0000e0 0x55 \
 		writel 0x4A0000e4 0x0 \
 		exe 0x4A000000
@@ -194,31 +184,43 @@ pine64_ums: sunxi-tools
 boot/pine64:
 	mkdir -p boot/pine64
 
-boot/pine64/sun50i-a64-pine64-pinebook.dtb: build/pinebook_linux.dtb
+boot/pine64/sun50i-a64-%.dtb: build/%_linux.dtb
 	cp $< $@
 
-boot/pine64/sun50i-a64-pine64-plus.dtb: build/pine64_linux.dtb
+boot/pine64/fes1-%.bin: build/fes1-%.bin
 	cp $< $@
 
-boot/boot.scr: blobs/boot.cmd
+boot/pine64/boot0-%.bin: build/boot0-%.bin
+	cp $< $@
+
+boot/pine64/u-boot-%.bin: build/u-boot-sun50iw1p1-secure-with-%-dtb.bin
+	cp $< $@
+
+boot/pine64/u-boot-%.bin: build/u-boot-sun50iw1p1-secure-with-%-dtb.bin
+	cp $< $@
+
+boot/boot.cmd: blobs/boot.cmd
 	mkimage -C none -A arm -T script -d $< $@
 
 boot/uEnv.txt: blobs/uEnv.txt
 	cp $< $@
 
+boot.cmd: blobs/boot.cmd
+	cp $< $@
+
 .PHONY: pine64_write
-pine64_write: boot build/boot0_pine64.bin build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
+pine64_write: boot build/boot0-pine64.bin build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
 	@if [[ -z "$(DISK)" ]]; then echo "Missing DISK, use: make pine64_write DISK=/dev/diskX"; exit 1; fi
 	-sudo umount $(DISK)*
-	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=build/boot0_pine64.bin
+	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=build/boot0-pine64.bin
 	sudo dd conv=notrunc bs=1k seek=19096 of="$(DISK)" if=build/u-boot-sun50iw1p1-secure-with-pine64-dtb.bin
 	cd boot/ && sudo mcopy -n -v -s -m -i $(DISK)?1 * ::
 
 .PHONY: pinebook_write
-pinebook_write: boot build/boot0_pinebook.bin build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
+pinebook_write: boot build/boot0-pinebook.bin build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
 	@if [ -z "$(DISK)" ]; then echo "Missing DISK, use: make pinebook_write DISK=/dev/diskX"; exit 1; fi
 	-sudo umount $(DISK)*
-	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=build/boot0_pinebook.bin
+	sudo dd conv=notrunc bs=1k seek=8 of="$(DISK)" if=build/boot0-pinebook.bin
 	sudo dd conv=notrunc bs=1k seek=19096 of="$(DISK)" if=build/u-boot-sun50iw1p1-secure-with-pinebook-dtb.bin
 	cd boot/ && sudo mcopy -n -v -s -m -i $(DISK)?1 * ::
 
