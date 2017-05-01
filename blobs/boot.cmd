@@ -38,7 +38,7 @@ if test "${pine64_screen0}" = "lcd"; then
 	fdt set /soc@01c00000/ctp ctp_used "<0x00000001>"
 	fdt set /soc@01c00000/ctp ctp_name "gt911_DB2"
 elif test "${pine64_screen0}" = "hdmi"; then
-	echo "Using LCD for main screen"
+	echo "Using HDMI for main screen"
 	fdt set /soc@01c00000/disp@01000000 screen0_output_type "<0x00000003>"
 	fdt set /soc@01c00000/disp@01000000 screen0_output_mode "${fdt_disp_mode}"
 fi
