@@ -5,3 +5,6 @@ u-boot-pine64/
 *.tmp
 build/*.fex
 /linux
+build/*.fix
+build/*.dts
+
