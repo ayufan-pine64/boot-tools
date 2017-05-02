@@ -1,4 +1,4 @@
-ATF_BUILD := release
+ATF_BUILD := debug
 BRANCH ?= my-hacks-1.2
 LINUX_DIR := linux
 DTS_DIR := $(LINUX_DIR)/arch/arm64/boot/dts
@@ -23,7 +23,7 @@ sunxi-tools:
 	make -C sunxi-tools.tmp
 	mv sunxi-tools.tmp sunxi-tools
 
-build/%_uboot.dtb: blobs/%_uboot.dts
+build/%-uboot.dtb: blobs/%-uboot.dts
 	mkdir -p build
 	dtc -Odtb -o $@ $<
 
