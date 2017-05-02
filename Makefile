@@ -199,13 +199,13 @@ boot/pine64/u-boot-%.bin: build/u-boot-sun50iw1p1-secure-with-%-dtb.bin
 boot/pine64/u-boot-%.bin: build/u-boot-sun50iw1p1-secure-with-%-dtb.bin
 	cp $< $@
 
-boot/boot.cmd: blobs/boot.cmd
+boot/boot.scr: blobs/boot.cmd
 	mkimage -C none -A arm -T script -d $< $@
 
 boot/uEnv.txt: blobs/uEnv.txt
 	cp $< $@
 
-boot.cmd: blobs/boot.cmd
+boot/boot.cmd: blobs/boot.cmd
 	cp $< $@
 
 .PHONY: pine64_write
@@ -257,11 +257,11 @@ compile_linux_modules: linux/.config
 		modules_install INSTALL_MOD_PATH=$(PWD)/linux_modules_install/
 
 .PHONY: update_pinebook
-update_pinebook: pinebook
+update_pinebook: pine64-pinebook
 	# Syncing...
 	rsync --partial -rv linux/arch/arm64/boot/Image root@pinebook:/boot/kernel
 	rsync --partial -av linux_modules_install/lib/ root@pinebook:/lib
-	rsync --partial -r boot/ root@pinebook:/boot
+	rsync --partial --exclude="uEnv.txt" -r boot/ root@pinebook:/boot
 
 .PHONY: update_linux_kernel
 update_linux_kernel: compile_linux_kernel
