@@ -14,14 +14,14 @@ hardware=sun50iw1p1
 # To use android recovery:
 # Create empty file recovery.txt in root of this partition
 
-# To enable LCD or HDMI, if change it will use default:
+# To enable LCD or HDMI, if not changed it will use default (experimental)
 # disp_screen0=lcd or hdmi
 # disp_screen1=lcd or hdmi
 # disp_mode=screen0 or screen1 or dualhead or xinerama or clone
 
-# USB OTG port mode
+# USB OTG port mode (experimental)
 # otg_mode=device or host or otg
-otg_mode=host
+# otg_mode=host
 
 # Configure contiguous memory allocation
 # This maybe required to be enlarged for 4K displays
