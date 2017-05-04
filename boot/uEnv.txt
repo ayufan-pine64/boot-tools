@@ -21,7 +21,7 @@ hardware=sun50iw1p1
 
 # USB OTG port mode (experimental)
 # otg_mode=device or host or otg
-# otg_mode=host
+otg_mode=host
 
 # Configure contiguous memory allocation
 # This maybe required to be enlarged for 4K displays

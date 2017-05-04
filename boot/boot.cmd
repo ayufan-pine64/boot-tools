@@ -110,13 +110,13 @@ if test "${camera_type}" = "ov5640"; then
 fi
 
 # set otg mode
-if test "${otg_mode}" == "device"; then
+if test "${otg_mode}" = "device"; then
 	echo "USB-OTG port is in device mode"
 	fdt set /soc@01c00000/usbc0@0 usb_port_type "<0x00000000>"
-elif test "${otg_mode}" == "host"; then
+elif test "${otg_mode}" = "host"; then
 	echo "USB-OTG port is in host mode"
 	fdt set /soc@01c00000/usbc0@0 usb_port_type "<0x00000001>"
-elif test "${otg_mode}" == "otg"; then
+elif test "${otg_mode}" = "otg"; then
 	echo "USB-OTG port is in OTG mode"
 	fdt set /soc@01c00000/usbc0@0 usb_port_type "<0x00000002>"
 fi
