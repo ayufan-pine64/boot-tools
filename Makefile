@@ -91,7 +91,11 @@ linux/.git:
 linux: linux/.git
 
 linux/.config: linux/.git
+ifneq ($(BUILD_ANDROID),)
+	make -C linux ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-" sun50iw1p1smp_android_defconfig
+else
 	make -C linux ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-" sun50iw1p1smp_linux_defconfig
+endif
 
 linux/scripts/dtc/dtc: linux/.config
 	make -C linux ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-" scripts/dtc/
@@ -256,17 +260,25 @@ compile_linux_modules: linux/.config
 		EXTRA_DEFINES="-DCONFIG_MALI400=1 -DCONFIG_MALI450=1 -DCONFIG_MALI400_PROFILING=1 -DCONFIG_MALI_DMA_BUF_MAP_ON_ATTACH -DCONFIG_MALI_DT" \
 		modules_install INSTALL_MOD_PATH=$(PWD)/linux_modules_install/
 
-.PHONY: update_pinebook
-update_pinebook: pine64-pinebook
-	# Syncing...
-	rsync --partial -rv linux/arch/arm64/boot/Image root@pinebook:/boot/kernel
-	rsync --partial -av linux_modules_install/lib/ root@pinebook:/lib
-	rsync --partial --exclude="uEnv.txt" -r boot/ root@pinebook:/boot
-
 .PHONY: update_linux_kernel
-update_linux_kernel: compile_linux_kernel
+update_pinebook_kernel: pine64-pinebook compile_linux_kernel
 	make update_pinebook
 
 .PHONY: update_linux
-update_linux: compile_linux_kernel compile_linux_modules
+update_pinebook_kernel_and_modules: pine64-pinebook compile_linux_kernel compile_linux_modules
 	make update_pinebook
+
+.PHONY: update_pinebook
+update_pinebook: pine64-pinebook
+ifneq ($(UPDATE_ANDROID),)
+	mkdir -p android_system_install/system/vendor/modules
+	find linux_modules_install/ -name '*.ko' -exec cp -u {} android_system_install/system/vendor/modules/ \;
+	adb remount
+	adb push linux/arch/arm64/boot/Image /bootloader/kernel
+	export ANDROID_PRODUCT_OUT="$(PWD)/android_system_install" && adb sync system
+else
+	# Syncing...
+	rsync --partial -rv linux/arch/arm64/boot/Image root@pinebook:$(DESTDIR)/boot/kernel
+	rsync --partial -av linux_modules_install/lib/ root@pinebook:$(DESTDIR)/lib
+	rsync --partial --exclude="uEnv.txt" -r boot/ root@pinebook:$(DESTDIR)/boot
+endif
