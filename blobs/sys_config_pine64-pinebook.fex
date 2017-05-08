@@ -1502,22 +1502,22 @@ lv1_volt = 1300
 lv2_freq = 1104000000
 lv2_volt = 1260
 
-lv3_freq = 1008000000
-lv3_volt = 1200
+lv3_freq = 1056000000
+lv3_volt = 1240
 
-lv4_freq = 816000000
-lv4_volt = 1100
+lv4_freq = 1008000000
+lv4_volt = 1200
 
-lv5_freq = 648000000
-lv5_volt = 1040
+lv5_freq = 960000000
+lv5_volt = 1160
 
-lv6_freq = 0
-lv6_volt = 1040
+lv6_freq = 912000000
+lv6_volt = 1120
 
-lv7_freq = 0
-lv7_volt = 1040
+lv7_freq = 816000000
+lv7_volt = 1080
 
-lv8_freq = 0
+lv8_freq = 648000000
 lv8_volt = 1040
 
 ;----------------------------------------------------------------------------------
