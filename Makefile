@@ -281,4 +281,7 @@ else
 	rsync --partial -rv linux/arch/arm64/boot/Image root@pinebook:$(DESTDIR)/boot/kernel
 	rsync --partial -av linux_modules_install/lib/ root@pinebook:$(DESTDIR)/lib
 	rsync --partial --exclude="uEnv.txt" -r boot/ root@pinebook:$(DESTDIR)/boot
+ifneq ($(UPDATE_UBOOT),)
+	dd if=boot/pine64/u-boot-pine64-pinebook.bin bs=1M | ssh root@pinebook dd conv=notrunc bs=1k seek=19096 oflag=sync of=/dev/mmcblk0
+endif
 endif
