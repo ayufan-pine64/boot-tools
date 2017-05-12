@@ -5,3 +5,5 @@ u-boot-pine64/
 *.tmp
 /build
 /linux
+/linux_modules_install
+/android_system_install
