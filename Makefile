@@ -119,30 +119,32 @@ build/%-linux.dtb: build/sys_config_%.fex.fix build/sun50iw1p1-soc.dtb.dts $(LIN
 
 build/boot0-%.bin: build/sys_config_%.bin blobs/boot0.bin
 	echo Blob needs to be at most 32KB && \
-		test $(shell stat -c%s blobs/boot0.bin) -le 32768
+		test $$(stat -c%s blobs/boot0.bin) -le 32768
 	cp blobs/boot0.bin $@.tmp
 	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
 	mv $@.tmp $@
 
 build/fes1-%.bin: build/sys_config_%.bin u-boot-pine64/fes1_sun50iw1p1.bin
 	echo Blob needs to be at most 32KB && \
-		test $(shell stat -c%s u-boot-pine64/fes1_sun50iw1p1.bin) -le 32768
+		test $$(stat -c%s u-boot-pine64/fes1_sun50iw1p1.bin) -le 32768
 	cp u-boot-pine64/fes1_sun50iw1p1.bin $@.tmp
 	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
 	mv $@.tmp $@
 
-build/u-boot-sun50iw1p1-with-%-dtb.bin: build/%-uboot.dtb u-boot-pine64/u-boot-sun50iw1p1.bin sunxi-pack-tools \
+build/u-boot-sun50iw1p1-with-%-dtb.bin: build/%-linux.dtb u-boot-pine64/u-boot-sun50iw1p1.bin sunxi-pack-tools \
 		build/sys_config_uboot.bin sunxi-pack-tools
 	sunxi-pack-tools/bin/update_uboot_fdt u-boot-pine64/u-boot-sun50iw1p1.bin $< $@.tmp
 	sunxi-pack-tools/bin/update_uboot $@.tmp build/sys_config_uboot.bin
 	mv $@.tmp $@
 
-build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/%-uboot.dtb u-boot-pine64/u-boot-sun50iw1p1.bin \
+build/u-boot-sun50iw1p1-secure-with-%-dtb.bin: build/%-linux.dtb u-boot-pine64/u-boot-sun50iw1p1.bin \
 		build/bl31.bin blobs/scp.bin build/sys_config_uboot.bin sunxi-pack-tools
 	sunxi-pack-tools/bin/merge_uboot u-boot-pine64/u-boot-sun50iw1p1.bin build/bl31.bin $@.tmp secmonitor
 	sunxi-pack-tools/bin/merge_uboot $@.tmp blobs/scp.bin $@.tmp2 scp
 	sunxi-pack-tools/bin/update_uboot_fdt $@.tmp2 $< $@.tmp3
 	sunxi-pack-tools/bin/update_uboot $@.tmp3 build/sys_config_uboot.bin
+	echo Blob needs to be at most 1MB && \
+		test $$(stat -c%s $@.tmp3) -le 1048576
 	mv $@.tmp3 $@
 	rm $@.tmp $@.tmp2
 
