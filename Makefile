@@ -107,12 +107,12 @@ build/%.dtb.dts: $(DTS_DIR)/%.dts $(wildcard $(DTS_DIR)/*.dts*)
 	$(CROSS_COMPILE)gcc -E -nostdinc -I$(DTS_DIR) -I$(LINUX_DIR)/include -D__DTS__  -x assembler-with-cpp -o $@.tmp $<
 	mv $@.tmp $@
 
-build/sys_config_%.fex.fix: blobs/sys_config_%.fex build
+build/sys_config_%.fex.fix: blobs/sys_config_%.fex
 	sed -e "s/\(\[dram\)_para\(\]\)/\1\2/g" \
 		-e "s/\(\[nand[0-9]\)_para\(\]\)/\1\2/g" $< > $@.tmp
 	mv $@.tmp $@
 
-build/%_linux.dtb: build/sys_config_%.fex.fix build/sun50iw1p1-soc.dtb.dts $(LINUX_DIR)/scripts/dtc/dtc
+build/%-linux.dtb: build/sys_config_%.fex.fix build/sun50iw1p1-soc.dtb.dts $(LINUX_DIR)/scripts/dtc/dtc
 	$(LINUX_DIR)/scripts/dtc/dtc -O dtb -o $@ \
 		-F $< \
 		build/sun50iw1p1-soc.dtb.dts
@@ -188,7 +188,7 @@ pine64_ums: sunxi-tools
 boot/pine64:
 	mkdir -p boot/pine64
 
-boot/pine64/sun50i-a64-%.dtb: build/%_linux.dtb
+boot/pine64/sun50i-a64-%.dtb: build/%-linux.dtb
 	cp $< $@
 
 boot/pine64/fes1-%.bin: build/fes1-%.bin
