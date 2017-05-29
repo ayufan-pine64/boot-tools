@@ -8,8 +8,14 @@
 version = "100"
 machine = "evb"
 
+;---------------------------------------------------------------------------------------------------------
+; eraseflag - 1 erase data partition, 0 - do not erase data partition
+; next_work - action after burn, 0x0 by config, 0x1 normal, 0x2 reboot, 0x3 shutdown,0x4 reupdate ,0x5 boot
+; debug_mode = 0 : do not print any message,debug_mode = 1 ,print debug message
+;---------------------------------------------------------------------------------------------------------
 [platform]
 eraseflag   = 1
+
 ;----------------------------------------------------------------------------------
 ;   system configuration
 ;   ?
