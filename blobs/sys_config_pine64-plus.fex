@@ -8,14 +8,8 @@
 version = "100"
 machine = "evb"
 
-;---------------------------------------------------------------------------------------------------------
-; eraseflag - 1 erase data partition, 0 - do not erase data partition
-; next_work - action after burn, 0x0 by config, 0x1 normal, 0x2 reboot, 0x3 shutdown,0x4 reupdate ,0x5 boot
-; debug_mode = 0 : do not print any message,debug_mode = 1 ,print debug message
-;---------------------------------------------------------------------------------------------------------
 [platform]
 eraseflag   = 1
-
 ;----------------------------------------------------------------------------------
 ;   system configuration
 ;   ?
@@ -257,7 +251,7 @@ uart1_rts        = port:PG8<2><1><default><default>
 uart1_cts        = port:PG9<2><1><default><default>
 
 [uart2]
-uart2_used       = 0
+uart2_used       = 1
 uart2_port       = 2
 uart2_type       = 4
 uart2_tx         = port:PB0<2><1><default><default>
@@ -266,7 +260,7 @@ uart2_rts        = port:PB2<2><1><default><default>
 uart2_cts        = port:PB3<2><1><default><default>
 
 [uart3]
-uart3_used       = 0
+uart3_used       = 1
 uart3_port       = 3
 uart3_type       = 4
 uart3_tx         = port:PH4<2><1><default><default>
@@ -275,7 +269,7 @@ uart3_rts        = port:PH6<2><1><default><default>
 uart3_cts        = port:PH7<2><1><default><default>
 
 [uart4]
-uart4_used       = 0
+uart4_used       = 1
 uart4_port       = 4
 uart4_type       = 4
 uart4_tx         = port:PD2<3><1><default><default>
