@@ -3,7 +3,7 @@ BRANCH ?= my-hacks-1.2
 LINUX_DIR := linux
 DTS_DIR := $(LINUX_DIR)/arch/arm64/boot/dts
 
-all: pine64-pinebook pine64-plus
+all: pine64-pinebook pine64-plus pine64-sopine
 
 help:
 	# make pine64-pinebook
@@ -155,7 +155,16 @@ pine64-pinebook: \
 		boot/boot.cmd \
 		boot/uEnv.txt
 
-.PHONY: pine64
+.PHONY: pine64-sopine
+pine64-sopine: boot/pine64/sun50i-a64-pine64-sopine.dtb \
+		boot/pine64/boot0-pine64-sopine.bin \
+		boot/pine64/fes1-pine64-sopine.bin \
+		boot/pine64/u-boot-pine64-sopine.bin \
+		boot/boot.scr \
+		boot/boot.cmd \
+		boot/uEnv.txt
+
+.PHONY: pine64-plus
 pine64-plus: boot/pine64/sun50i-a64-pine64-plus.dtb \
 		boot/pine64/boot0-pine64-plus.bin \
 		boot/pine64/fes1-pine64-plus.bin \
