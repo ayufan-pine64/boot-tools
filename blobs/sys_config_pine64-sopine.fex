@@ -15,8 +15,6 @@ machine = "evb"
 ;---------------------------------------------------------------------------------------------------------
 [platform]
 eraseflag   = 1
-next_work   = 3
-debug_mode  = 0
 
 ;---------------------------------------------------------------------------------------------------------
 ; dragonboard_test default is 0,only in dragonboard card boot mode must be set 1
@@ -43,7 +41,7 @@ dragonboard_test = 0
 
 [power_sply]
 dcdc1_vol                  = 1003300
-;dcdc2_vol                  = 1001100
+dcdc2_vol                  = 1001100
 dcdc6_vol                  = 1001100
 aldo1_vol                  = 2800
 aldo2_vol                  = 1001800
