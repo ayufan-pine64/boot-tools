@@ -23,6 +23,8 @@ elif test "${hdmi_mode}" = "1080p60"; then setenv fdt_hdmi_mode "<0x0000000a>"
 elif test "${hdmi_mode}" = "2160p30"; then setenv fdt_hdmi_mode "<0x0000001c>"
 elif test "${hdmi_mode}" = "2160p25"; then setenv fdt_hdmi_mode "<0x0000001d>"
 elif test "${hdmi_mode}" = "2160p24"; then setenv fdt_hdmi_mode "<0x0000001e>"
+elif test "${hdmi_mode}" = "800x480p"; then setenv fdt_hdmi_mode "<0x0000001f>"
+elif test "${hdmi_mode}" = "1024x600p"; then setenv fdt_hdmi_mode "<0x00000020>"
 else setenv fdt_hdmi_mode "<0x0000000a>"
 fi
 

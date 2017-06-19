@@ -2,6 +2,7 @@ ATF_BUILD := debug
 BRANCH ?= my-hacks-1.2
 LINUX_DIR := linux
 DTS_DIR := $(LINUX_DIR)/arch/arm64/boot/dts
+REMOTE_HOST ?= pinebook
 
 all: pine64-pinebook pine64-plus pine64-sopine
 
@@ -268,16 +269,16 @@ compile_linux_modules: linux/.config
 		EXTRA_DEFINES="-DCONFIG_MALI400=1 -DCONFIG_MALI450=1 -DCONFIG_MALI400_PROFILING=1 -DCONFIG_MALI_DMA_BUF_MAP_ON_ATTACH -DCONFIG_MALI_DT" \
 		modules_install INSTALL_MOD_PATH=$(PWD)/linux_modules_install/
 
-.PHONY: update_linux_kernel
-update_pinebook_kernel: pine64-pinebook compile_linux_kernel
-	make update_pinebook
+.PHONY: update_kernel
+update_kernel: all compile_linux_kernel
+	make upload_to_host
 
-.PHONY: update_linux
-update_pinebook_kernel_and_modules: pine64-pinebook compile_linux_kernel compile_linux_modules
-	make update_pinebook
+.PHONY: update_kernel_and_modules
+update_kernel_and_modules: all compile_linux_kernel compile_linux_modules
+	make upload_to_host
 
-.PHONY: update_pinebook
-update_pinebook: pine64-pinebook
+.PHONY: upload_to_host
+upload_to_host: all
 ifneq ($(UPDATE_ANDROID),)
 	mkdir -p android_system_install/system/vendor/modules
 	find linux_modules_install/ -name '*.ko' -exec cp -u {} android_system_install/system/vendor/modules/ \;
@@ -286,10 +287,10 @@ ifneq ($(UPDATE_ANDROID),)
 	export ANDROID_PRODUCT_OUT="$(PWD)/android_system_install" && adb sync system
 else
 	# Syncing...
-	rsync --partial -rv linux/arch/arm64/boot/Image root@pinebook:$(DESTDIR)/boot/kernel
-	rsync --partial -av linux_modules_install/lib/ root@pinebook:$(DESTDIR)/lib
-	rsync --partial --exclude="uEnv.txt" -r boot/ root@pinebook:$(DESTDIR)/boot
+	rsync --partial -rv linux/arch/arm64/boot/Image root@$(REMOTE_HOST):$(DESTDIR)/boot/kernel
+	rsync --partial -av linux_modules_install/lib/ root@$(REMOTE_HOST):$(DESTDIR)/lib
+	rsync --partial --exclude="uEnv.txt" -r boot/ root@$(REMOTE_HOST):$(DESTDIR)/boot
 ifneq ($(UPDATE_UBOOT),)
-	dd if=boot/pine64/u-boot-pine64-pinebook.bin bs=1M | ssh root@pinebook dd conv=notrunc bs=1k seek=19096 oflag=sync of=/dev/mmcblk0
+	dd if=boot/pine64/u-boot-pine64-pinebook.bin bs=1M | ssh root@$(REMOTE_HOST) dd conv=notrunc bs=1k seek=19096 oflag=sync of=/dev/mmcblk0
 endif
 endif

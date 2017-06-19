@@ -42,6 +42,8 @@ cma=384M
 # hdmi_mode=2160p30
 # hdmi_mode=2160p25
 # hdmi_mode=2160p24
+# hdmi_mode=800x480p
+# hdmi_mode=1024x600p
 
 # To enable DVI compatibilty:
 # disp_dvi_compat=on
