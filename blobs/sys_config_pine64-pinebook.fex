@@ -1440,6 +1440,7 @@ pmu_powkey_off_func        = 0
 pmu_powkey_off_en          = 1
 pmu_powkey_long_time       = 1500
 pmu_powkey_on_time         = 1000
+pmu_reset                  = 1
 power_start                = 0
 
 ;--------------------------------------------------------------------------------------------------------
