@@ -484,11 +484,11 @@ fb1_height               = 0
 ;lcd_cmap_en           lcd color map function enable
 ;----------------------------------------------------------------------------------
 [lcd0]
-lcd_used            = 1
+lcd_used            = 0
 
 lcd_driver_name     = "mb709_mipi"
 lcd_backlight       = 50
-lcd_if              = 4
+lcd_if              = 0
 lcd_x               = 1024
 lcd_y               = 600
 lcd_width           = 0
@@ -553,6 +553,7 @@ hdmi_used = 1
 hdmi_power = "vcc-hdmi-33"
 hdmi_hdcp_enable = 0
 hdmi_cts_compatibility = 0
+hdmi_hpd_mask = 256
 
 ;----------------------------------------------------------------------------------
 ;pwm config

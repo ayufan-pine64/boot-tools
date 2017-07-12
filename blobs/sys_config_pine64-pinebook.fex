@@ -540,7 +540,7 @@ lcd_used            = 1
 lcd_driver_name     = "anx9804_panel"
 lcd_model_name		= 2
 lcd_backlight       = 50
-lcd_if              = 0
+lcd_if              = 3
 lcd_x               = 1366
 lcd_y               = 768
 lcd_width           = 256
@@ -628,7 +628,7 @@ lcdd8               = port:PD20<7><0><default><default>
 lcdd9               = port:PD21<7><0><default><default>
 
 [hdmi]
-hdmi_used = 1
+hdmi_used = 0
 hdmi_power = "vcc-hdmi-33"
 hdmi_hdcp_enable = 0
 hdmi_cts_compatibility = 0

@@ -84,7 +84,7 @@ uboot: u-boot-pine64/u-boot-sun50iw1p1.bin
 spl: u-boot-pine64/fes1_sun50iw1p1.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
 
 linux/.git:
-	git clone --depth 1 --single-branch --branch=$(BRANCH) https://github.com/ayufan-pine64/linux-pine64.git linux
+	git clone --depth 1 --single-branch --branch=my-hacks-1.2-with-drm https://github.com/ayufan-pine64/linux-pine64.git linux
 
 linux: linux/.git
 

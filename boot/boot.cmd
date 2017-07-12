@@ -39,30 +39,50 @@ fi
 if test "${disp_screen0}" = "lcd"; then
 	echo "Using LCD for main screen"
 	fdt set /soc@01c00000/disp@01000000 screen0_output_type "<0x00000001>"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_used "<0x00000001>"
-
 	fdt set /soc@01c00000/boot_disp output_type "<0x00000001>"
 
+	# enable LCD screen
+	fdt set /soc@01c00000/lcd0@01c0c000 status "okay"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_used "<0x00000001>"
+
+	# disable HDMI screen
+	fdt set /soc@01c00000/hdmi@01ee0000 status "disabled"
+
+	# enable touchpad
 	fdt set /soc@01c00000/ctp status "okay"
 	fdt set /soc@01c00000/ctp ctp_used "<0x00000001>"
 	fdt set /soc@01c00000/ctp ctp_name "gt911_DB2"
 elif test "${disp_screen0}" = "hdmi"; then
 	echo "Using HDMI for main screen"
 	fdt set /soc@01c00000/disp@01000000 screen0_output_type "<0x00000003>"
+
+	# enable HDMI screen
+	fdt set /soc@01c00000/hdmi@01ee0000 status "okay"
+
+	# disable LCD screen
+	fdt set /soc@01c00000/lcd0@01c0c000 status "disabled"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_used "<0x00000000>"
 fi
 
 # set display for screen1
 if test "${disp_screen1}" = "lcd"; then
 	echo "Using LCD for secondary screen"
 	fdt set /soc@01c00000/disp@01000000 screen1_output_type "<0x00000001>"
+
+	# enable LCD screen
+	fdt set /soc@01c00000/lcd0@01c0c000 status "okay"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_used "<0x00000001>"
 
+	# enable touchpad
 	fdt set /soc@01c00000/ctp status "okay"
 	fdt set /soc@01c00000/ctp ctp_used "<0x00000001>"
 	fdt set /soc@01c00000/ctp ctp_name "gt911_DB2"
 elif test "${disp_screen1}" = "hdmi"; then
 	echo "Using HDMI for secondary screen"
 	fdt set /soc@01c00000/disp@01000000 screen1_output_type "<0x00000003>"
+
+	# enable HDMI screen
+	fdt set /soc@01c00000/hdmi@01ee0000 status "okay"
 fi
 
 # set disp_mode 

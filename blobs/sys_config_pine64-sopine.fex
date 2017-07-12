@@ -545,7 +545,7 @@ fb1_height               = 0
 ;lcd_cmap_en           lcd color map function enable
 ;----------------------------------------------------------------------------------
 [lcd0]
-lcd_used            = 1
+lcd_used            = 0
 
 lcd_driver_name     = "mb709_mipi"
 lcd_backlight       = 50
