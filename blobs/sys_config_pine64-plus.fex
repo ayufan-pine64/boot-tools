@@ -553,7 +553,6 @@ hdmi_used = 1
 hdmi_power = "vcc-hdmi-33"
 hdmi_hdcp_enable = 0
 hdmi_cts_compatibility = 0
-hdmi_hpd_mask = 256
 
 ;----------------------------------------------------------------------------------
 ;pwm config
