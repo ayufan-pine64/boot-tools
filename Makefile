@@ -287,9 +287,9 @@ ifneq ($(UPDATE_ANDROID),)
 	export ANDROID_PRODUCT_OUT="$(PWD)/android_system_install" && adb sync system
 else
 	# Syncing...
-	rsync --partial -rv linux/arch/arm64/boot/Image root@$(REMOTE_HOST):$(DESTDIR)/boot/kernel
-	rsync --partial -av linux_modules_install/lib/ root@$(REMOTE_HOST):$(DESTDIR)/lib
-	rsync --partial --exclude="uEnv.txt" -r boot/ root@$(REMOTE_HOST):$(DESTDIR)/boot
+	rsync --partial --checksum -rv linux/arch/arm64/boot/Image root@$(REMOTE_HOST):$(DESTDIR)/boot/kernel
+	rsync --partial --checksum -av linux_modules_install/lib/ root@$(REMOTE_HOST):$(DESTDIR)/lib
+	rsync --partial --checksum --exclude="uEnv.txt" -r boot/ root@$(REMOTE_HOST):$(DESTDIR)/boot
 ifneq ($(UPDATE_UBOOT),)
 	dd if=boot/pine64/u-boot-pine64-pinebook.bin bs=1M | ssh root@$(REMOTE_HOST) dd conv=notrunc bs=1k seek=19096 oflag=sync of=/dev/mmcblk0
 endif
