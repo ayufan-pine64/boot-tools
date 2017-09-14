@@ -127,10 +127,9 @@ pll10           = 264
 ;
 ;*****************************************************************************
 [dram_para]
-
 dram_clk        = 552
 dram_type       = 7
-dram_zq         = 0x3b3bbb
+dram_zq         = 0x3b3bdd
 dram_odt_en     = 0x1
 dram_para1      = 0x10E410E4
 dram_para2      = 0x1000
@@ -149,9 +148,9 @@ dram_tpr7       = 0x2a066198
 dram_tpr8       = 0x0
 dram_tpr9       = 0x0
 dram_tpr10      = 0x8808
-dram_tpr11      = 0x0
+dram_tpr11      = 0x40a60066
 dram_tpr12      = 0x55550000
-dram_tpr13      = 0x04002900
+dram_tpr13      = 0x04000900
 
 ;----------------------------------------------------------------------------------
 ;os life cycle para configuration
