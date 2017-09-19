@@ -16,6 +16,15 @@ machine = "evb"
 [platform]
 eraseflag   = 1
 
+;---------------------------------------------------------------------------------------------------------
+; dragonboard_test default is 0,only in dragonboard card boot mode must be set 1
+; If you modified dragonboard_test flag,before you pack imgage, you must be build kernel again.
+;---------------------------------------------------------------------------------------------------------
+[target]
+boot_clock     = 1008
+storage_type    = -1
+burn_key = 0
+
 ;----------------------------------------------------------------------------------
 ;   system configuration
 ;   ?
@@ -27,11 +36,6 @@ eraseflag   = 1
 ;aldo2_vol                                                     ---set aldo2 voltage,mV,700-3300,100mV/step
 ;aldo3_vol                                                     ---set aldo3 voltage,mV,700-3300,100mV/step
 ;----------------------------------------------------------------------------------
-[target]
-boot_clock     = 1008
-storage_type    = -1
-burn_key = 0
-
 [power_sply]
 dcdc1_vol                  = 1003300
 dcdc2_vol                  = 1001100
