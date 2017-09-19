@@ -21,11 +21,9 @@ eraseflag   = 1
 ; If you modified dragonboard_test flag,before you pack imgage, you must be build kernel again.
 ;---------------------------------------------------------------------------------------------------------
 [target]
-boot_clock       = 1008
-storage_type     = -1
-burn_key         = 1
-power_start                = 3
-dragonboard_test = 0
+boot_clock     = 1008
+storage_type    = -1
+burn_key = 0
 
 ;----------------------------------------------------------------------------------
 ;   system configuration
@@ -221,8 +219,9 @@ gmac_power1        = "axp81x_dc1sw:0"
 gmac_power2        = ""
 gmac_power3        = ""
 
-tx-delay           = 3
-rx-delay           = 0
+tx-delay           = 2
+rx-delay           = 2
+
 ;----------------------------------------------------------------------------------
 ;i2c configuration
 ;----------------------------------------------------------------------------------
@@ -509,10 +508,10 @@ nand0_p3 = 0x55aaaa55
 disp_init_enable         = 1
 disp_mode                = 0
 
-screen0_output_type      = 1
-screen0_output_mode      = 4
+screen0_output_type      = 3
+screen0_output_mode      = 5
 
-screen1_output_type      = 3
+screen1_output_type      = 1
 screen1_output_mode      = 5
 
 fb0_format               = 0
@@ -559,7 +558,7 @@ lcd_used            = 0
 
 lcd_driver_name     = "mb709_mipi"
 lcd_backlight       = 50
-lcd_if              = 4
+lcd_if              = 0
 lcd_x               = 1024
 lcd_y               = 600
 lcd_width           = 0
@@ -646,8 +645,8 @@ pwm_positive        = port:PL10<7><0><default><default>
 
 [boot_disp]
 output_disp = 0
-output_type = 1
-output_mode = 4
+output_type = 3
+output_mode = 5
 
 ;--------------------------------------------------------------------------------
 ;csi (COMS Sensor Interface) configuration
@@ -957,7 +956,7 @@ usb_hsic_reset_n_gpio       =
 ;---     序列号标志
 ;--------------------------------
 [serial_feature]
-sn_filename = "ULI/factory/snum.txt"
+sn_filename = "sn.txt"
 
 ;--------------------------------------------------------------------------------
 ; G sensor configuration
@@ -1465,7 +1464,7 @@ regulator18     = "axp81x_eldo3 none dvdd-csi-18"
 regulator19     = "axp81x_fldo1 none vcc-hsic-12"
 regulator20     = "axp81x_fldo2 none vdd-cpus";
 regulator21     = "axp81x_gpio0ldo none vcc-ctp"
-regulator22     = "axp81x_gpio1ldo none "
+regulator22     = "axp81x_gpio1ldo none"
 regulator23     = "axp81x_dc1sw none vcc-lvds vcc-dsi-33"
 
 ;----------------------------------------------------------------------------------
@@ -1581,10 +1580,4 @@ Vdevice_1           = port:PB02<4><1><2><default>
 normal_freq       = 408
 scene_ctrl_status = 0
 temp_ctrl_status  = 1
-
-;----------------------------------------------------------------------------------
-[secure]
-dram_region_mbytes       = 64
-drm_region_mbytes        = 64
-drm_region_start_mbytes  = 0
 ;----------------------------------------------------------------------------------
