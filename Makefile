@@ -261,13 +261,13 @@ compile_linux_modules: linux/.config
 		EXTRA_DEFINES="-DCONFIG_MALI400=1 -DCONFIG_MALI450=1 -DCONFIG_MALI400_PROFILING=1 -DCONFIG_MALI_DMA_BUF_MAP_ON_ATTACH -DCONFIG_MALI_DT"
 
 	# Installing modules...
-	make -C linux ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-" -j4 modules_install INSTALL_MOD_PATH=$(PWD)/linux_modules_install/
+	make -C linux ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-" -j4 modules_install INSTALL_MOD_PATH=$(CURDIR)/linux_modules_install/
 	make -C linux LOCALVERSION=$(LINUX_LOCALVERSION) M=modules/gpu/mali400/kernel_mode/driver/src/devicedrv/mali \
 		ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-" \
 		CONFIG_MALI400=m CONFIG_MALI450=y CONFIG_MALI400_PROFILING=y \
 		CONFIG_MALI_DMA_BUF_MAP_ON_ATTACH=y CONFIG_MALI_DT=y \
 		EXTRA_DEFINES="-DCONFIG_MALI400=1 -DCONFIG_MALI450=1 -DCONFIG_MALI400_PROFILING=1 -DCONFIG_MALI_DMA_BUF_MAP_ON_ATTACH -DCONFIG_MALI_DT" \
-		modules_install INSTALL_MOD_PATH=$(PWD)/linux_modules_install/
+		modules_install INSTALL_MOD_PATH=$(CURDIR)/linux_modules_install/
 
 .PHONY: update_kernel
 update_kernel: all compile_linux_kernel
@@ -284,7 +284,7 @@ ifneq ($(UPDATE_ANDROID),)
 	find linux_modules_install/ -name '*.ko' -exec cp -u {} android_system_install/system/vendor/modules/ \;
 	adb remount
 	adb push linux/arch/arm64/boot/Image /bootloader/kernel
-	export ANDROID_PRODUCT_OUT="$(PWD)/android_system_install" && adb sync system
+	export ANDROID_PRODUCT_OUT="$(CURDIR)/android_system_install" && adb sync system
 else
 	# Syncing...
 	rsync --partial --checksum -rv linux/arch/arm64/boot/Image root@$(REMOTE_HOST):$(DESTDIR)/boot/kernel
