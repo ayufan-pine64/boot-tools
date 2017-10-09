@@ -112,7 +112,7 @@ build/sys_config_%.fex.fix: blobs/sys_config_%.fex
 
 build/%-linux.dtb: build/sys_config_%.fex.fix build/sun50iw1p1-soc.dtb.dts $(LINUX_DIR)/scripts/dtc/dtc
 	$(LINUX_DIR)/scripts/dtc/dtc -O dtb -o $@ \
-		-F $< -p 16384 \
+		-F $< -R 512 \
 		build/sun50iw1p1-soc.dtb.dts
 
 build/boot0-%.bin: build/sys_config_%.bin blobs/boot0.bin
