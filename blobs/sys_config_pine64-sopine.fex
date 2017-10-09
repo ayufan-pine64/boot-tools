@@ -558,7 +558,7 @@ lcd_used            = 0
 
 lcd_driver_name     = "mb709_mipi"
 lcd_backlight       = 50
-lcd_if              = 0
+lcd_if              = 4
 lcd_x               = 1024
 lcd_y               = 600
 lcd_width           = 0
