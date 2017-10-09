@@ -153,10 +153,12 @@ fi
 # Re-order SD or eMMC to always be a first device when booting
 if test "${boot_part}" = "0:1"; then
 	echo "Booting from SD so moving eMMC definition..."
+	fdt resize
 	fdt dup /soc@01c00000/ sdmmc@01C11000 sdmmc@01C11001
 	fdt rm /soc@01c00000/sdmmc@01C11000/
 else
 	echo "Booting from eMMC so moving SD definition..."
+	fdt resize
 	fdt dup /soc@01c00000/ sdmmc@01c0f000 sdmmc@01c0f001
 	fdt rm /soc@01c00000/sdmmc@01c0f000/
 fi
