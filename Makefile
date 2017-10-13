@@ -178,8 +178,27 @@ pine64-plus: boot/pine64/sun50i-a64-pine64-plus.dtb \
 pinebook_ums: sunxi-tools
 	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
 	# 0x4A0000e4: is a storage type: EMMC
-	sunxi-tools/sunxi-fel -v spl build/fes1_pinebook.bin \
-		write-with-progress 0x4A000000 boot/pine64/u-boot-pine64-pinebook.bin \
+	sunxi-tools/sunxi-fel -v spl boot/pine64/fes1-pine64-pinebook.bin
+	sunxi-tools/sunxi-fel write-with-progress 0x4A000000 boot/pine64/u-boot-pine64-pinebook.bin \
+		writel 0x4A0000e0 0x55 \
+		writel 0x4A0000e4 0x2 \
+		exe 0x4A000000
+
+.PHONY: sopine_ums sopine_boot
+sopine_ums: sunxi-tools
+	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
+	# 0x4A0000e4: is a storage type: SD card
+	sunxi-tools/sunxi-fel -v spl boot/pine64/fes1-pine64-sopine.bin
+	sunxi-tools/sunxi-fel write-with-progress 0x4A000000 boot/pine64/u-boot-pine64-sopine.bin \
+		writel 0x4A0000e0 0x55 \
+		writel 0x4A0000e4 0x2 \
+		exe 0x4A000000
+
+sopine_boot: sunxi-tools
+	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
+	# 0x4A0000e4: is a storage type: SD card
+	sunxi-tools/sunxi-fel -v spl boot/pine64/fes1-pine64-pinebook.bin
+	sunxi-tools/sunxi-fel write-with-progress 0x4A000000 boot/pine64/u-boot-pine64-sopine.bin \
 		writel 0x4A0000e0 0x55 \
 		writel 0x4A0000e4 0x2 \
 		exe 0x4A000000
@@ -188,8 +207,8 @@ pinebook_ums: sunxi-tools
 pine64_ums: sunxi-tools
 	# 0x4A0000e0: is a work mode: the 0x55 is a special work mode used to force USB mass storage
 	# 0x4A0000e4: is a storage type: SD card
-	sunxi-tools/sunxi-fel -v spl boot/pine64/fes1-pine64-plus.bin \
-		write-with-progress 0x4A000000 boot/pine64/u-boot-pine64-plus.bin \
+	sunxi-tools/sunxi-fel -v spl boot/pine64/fes1-pine64-plus.bin
+	sunxi-tools/sunxi-fel write-with-progress 0x4A000000 boot/pine64/u-boot-pine64-plus.bin \
 		writel 0x4A0000e0 0x55 \
 		writel 0x4A0000e4 0x0 \
 		exe 0x4A000000
