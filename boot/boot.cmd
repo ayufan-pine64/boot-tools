@@ -113,6 +113,21 @@ else
 	fdt set /soc@01c00000/hdmi@01ee0000 hdmi_cec_support "<0x00000000>"
 fi
 
+# Pinebook LCD
+if test "${pinebook_lcd_mode}" = "batch1"; then
+	echo "Fixing LCD parameters to use Pinebook Batch 1"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "72"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vbp "20"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vt "860"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vspw "5"
+elif test "${pinebook_lcd_mode}" = "batch2"; then
+	echo "Fixing LCD parameters to use Pinebook Batch 2"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "77"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vbp "7"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vt "790"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vspw "4"
+fi
+
 # DVI compatibility
 if test "${disp_dvi_compat}" = "on"; then
 	fdt set /soc@01c00000/hdmi@01ee0000 hdmi_hdcp_enable "<0x00000000>"
@@ -144,6 +159,12 @@ elif test "${otg_mode}" = "host"; then
 elif test "${otg_mode}" = "otg"; then
 	echo "USB-OTG port is in OTG mode"
 	fdt set /soc@01c00000/usbc0@0 usb_port_type "<0x00000002>"
+fi
+
+if test "${emmc_compat}" = "on"; then
+	fdt rm /soc@01c00000/sdmmc@01C11000 mmc-ddr-1_8v;
+	fdt rm /soc@01c00000/sdmmc@01C11000 mmc-hs200-1_8v;
+	fdt rm /soc@01c00000/sdmmc@01C11000 mmc-hs400-1_8v;
 fi
 
 if test "${boot_part}" = ""; then

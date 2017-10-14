@@ -52,14 +52,23 @@ cma=384M
 # camera_type=s5k4ec
 # camera_type=ov5640
 
-# Configure ethernet speed
+# Configure ethernet speed (Android-only)
 eth0_speed=auto
 # eth0_speed=1000
 # eth0_speed=100
 # eth0_speed=10
+
+# If you are having problems with running from eMMC, like Sandisk eMMC
+# It forces to use SDR-mode instead of HS-mode.
+# Enable eMMC compatibility mode:
+# emmc_compat=on
 
 # Disable HDMI CEC
 # hdmi_cec=0
 
 # Enable experimental HDMI CEC driver
 hdmi_cec=2
+
+# Allow to change LCD type (Pinebook-only)
+# pinebook_lcd_mode=batch1
+# pinebook_lcd_mode=batch2
