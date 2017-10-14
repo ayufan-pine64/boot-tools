@@ -17,7 +17,7 @@ hardware=sun50iw1p1
 # To enable LCD or HDMI, if not changed it will use default (experimental)
 # disp_screen0=lcd or hdmi
 # disp_screen1=lcd or hdmi
-# disp_mode=screen0 or screen1 or dualhead or xinerama or clone
+# disp_mode=screen0 or screen1 or dualhead or xinerama or clone or disabled
 
 # USB OTG port mode (experimental)
 # otg_mode=device or host or otg

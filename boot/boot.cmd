@@ -102,6 +102,11 @@ elif test "${disp_mode}" = "xinerama"; then
 elif test "${disp_mode}" = "clone"; then
 	echo "Clonning screen0 and screen1"
 	fdt set /soc@01c00000/disp@01000000 disp_mode "<0x00000004>"
+elif test "${disp_mode}" = "disabled"; then
+	echo "Disabling all screens"
+	fdt set /soc@01c00000/disp@01000000 disp_mode "<0x00000000>"
+	fdt set /soc@01c00000/hdmi@01ee0000 status "disabled"
+	fdt set /soc@01c00000/lcd0@01c0c000 status "disabled"
 fi
 
 # HDMI CEC

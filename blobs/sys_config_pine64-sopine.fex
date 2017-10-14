@@ -608,7 +608,7 @@ lcd_gpio_0          = port:PD24<1><0><default><1>
 ;lcdd9               = port:PD21<7><0><default><default>
 
 [hdmi]
-hdmi_used = 0
+hdmi_used = 1
 hdmi_power = "vcc-hdmi-33"
 hdmi_hdcp_enable = 0
 hdmi_cts_compatibility = 0
