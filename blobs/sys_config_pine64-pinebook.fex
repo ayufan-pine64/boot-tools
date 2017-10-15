@@ -80,7 +80,7 @@ sdc_d2          = port:PF5<2><1><2><default>
 [card2_boot_para]
 sdc_io_1v8      = 1
 card_ctrl       = 2
-;card_high_speed = 1
+card_high_speed = 1
 card_line       = 8
 sdc_ds          = port:PC1<3><1><3><default>
 sdc_clk         = port:PC5<3><1><3><default>
@@ -844,7 +844,7 @@ sunxi-power-save-mode =
 sunxi-dis-signal-vol-sw =
 mmc-ddr-1_8v	   =
 mmc-hs200-1_8v	   =
-mmc-hs400-1_8v	   =
+;mmc-hs400-1_8v	   =
 max-frequency	   = 100000000
 sdc_tm4_sm0_freq0 = 0
 sdc_tm4_sm0_freq1 = 0
