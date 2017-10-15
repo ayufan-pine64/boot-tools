@@ -172,6 +172,12 @@ if test "${emmc_compat}" = "on"; then
 	fdt rm /soc@01c00000/sdmmc@01C11000 mmc-hs400-1_8v;
 fi
 
+# Execute user command
+if test "${user_cmd}" != ""; then
+	echo "Executing ${user_cmd}..."
+	run user_cmd
+fi
+
 if test "${boot_part}" = ""; then
 	setenv boot_part "0:1"
 fi
