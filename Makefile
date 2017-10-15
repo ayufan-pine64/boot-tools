@@ -69,13 +69,13 @@ u-boot-pine64:
 u-boot-pine64/include/configs/sun50iw1p1.h: u-boot-pine64
 
 u-boot-pine64/include/autoconf.mk: u-boot-pine64/include/configs/sun50iw1p1.h
-	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-" sun50iw1p1_config
+	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabihf-" sun50iw1p1_config
 
 u-boot-pine64/u-boot-sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
-	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-" -j$(nproc)
+	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabihf-" -j$(nproc)
 
 u-boot-pine64/fes1_sun50iw1p1.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin: u-boot-pine64/include/autoconf.mk
-	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabi-" spl
+	make -C u-boot-pine64 ARCH=arm CROSS_COMPILE="ccache arm-linux-gnueabihf-" spl
 
 .PHONY: uboot
 uboot: u-boot-pine64/u-boot-sun50iw1p1.bin
@@ -115,17 +115,17 @@ build/%-linux.dtb: build/sys_config_%.fex.fix build/sun50iw1p1-soc.dtb.dts $(LIN
 		-F $< -R 512 \
 		build/sun50iw1p1-soc.dtb.dts
 
-build/boot0-%.bin: build/sys_config_%.bin blobs/boot0.bin
+build/boot0-%.bin: build/sys_config_%.bin u-boot-pine64/boot0_sdcard_sun50iw1p1.bin
 	echo Blob needs to be at most 32KB && \
-		test $$(stat -c%s blobs/boot0.bin) -le 32768
-	cp blobs/boot0.bin $@.tmp
+		test $$(stat -c%s $(word 2,$^)) -le 32768
+	cp  $(word 2,$^) $@.tmp
 	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
 	mv $@.tmp $@
 
 build/fes1-%.bin: build/sys_config_%.bin u-boot-pine64/fes1_sun50iw1p1.bin
 	echo Blob needs to be at most 32KB && \
-		test $$(stat -c%s u-boot-pine64/fes1_sun50iw1p1.bin) -le 32768
-	cp u-boot-pine64/fes1_sun50iw1p1.bin $@.tmp
+		test $$(stat -c%s $(word 2,$^)) -le 32768
+	cp  $(word 2,$^) $@.tmp
 	sunxi-pack-tools/bin/update_boot0 $@.tmp $< sdmmc_card
 	mv $@.tmp $@
 
@@ -313,3 +313,9 @@ ifneq ($(UPDATE_UBOOT),)
 	dd if=boot/pine64/u-boot-pine64-pinebook.bin bs=1M | ssh root@$(REMOTE_HOST) dd conv=notrunc bs=1k seek=19096 oflag=sync of=/dev/mmcblk0
 endif
 endif
+
+update_boot: all
+	[ -n "$(REMOTE_MODEL)" ] # specify REMOTE_MODEL=sopine|pinebook|plus
+	[ -n "$(REMOTE_DISK)" ] # specify REMOTE_DISK=0|1
+	dd if=boot/pine64/boot0-pine64-$(REMOTE_MODEL).bin bs=1M | ssh root@$(REMOTE_HOST) dd conv=notrunc bs=1k seek=8 oflag=sync of=/dev/mmcblk$(REMOTE_DISK)
+	dd if=boot/pine64/u-boot-pine64-$(REMOTE_MODEL).bin bs=1M | ssh root@$(REMOTE_HOST) dd conv=notrunc bs=1k seek=19096 oflag=sync of=/dev/mmcblk$(REMOTE_DISK)
