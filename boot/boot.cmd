@@ -167,9 +167,16 @@ elif test "${otg_mode}" = "otg"; then
 fi
 
 if test "${emmc_compat}" = "on"; then
+	echo "Enabling eMMC compatibility mode (Use SDR)..."
 	fdt rm /soc@01c00000/sdmmc@01C11000 mmc-ddr-1_8v;
 	fdt rm /soc@01c00000/sdmmc@01C11000 mmc-hs200-1_8v;
 	fdt rm /soc@01c00000/sdmmc@01C11000 mmc-hs400-1_8v;
+elif test "${emmc_compat}" = "150mhz"; then
+	echo "Enabling eMMC HS200 150MHz mode..."
+	fdt set /soc@01c00000/sdmmc@01C11000 max-frequency "<0x8F0D180>";
+elif test "${emmc_compat}" = "200mhz"; then
+	echo "Enabling eMMC HS200 200MHz mode..."
+	fdt set /soc@01c00000/sdmmc@01C11000 max-frequency "<0xBEBC200>";
 fi
 
 # Execute user command

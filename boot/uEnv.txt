@@ -63,6 +63,12 @@ eth0_speed=auto
 # Enable eMMC compatibility mode:
 # emmc_compat=on
 
+# Enable enhanced eMMC speed (might not work), the HS200/150MHz:
+# emmc_compat=150mhz
+
+# Enable enhanced eMMC speed (might not work), the HS200/200MHz:
+# emmc_compat=200mhz
+
 # Disable HDMI CEC
 # hdmi_cec=0
 
