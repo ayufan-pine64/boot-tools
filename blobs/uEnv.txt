@@ -78,6 +78,7 @@ hdmi_cec=2
 # Allow to change LCD type (Pinebook-only)
 # pinebook_lcd_mode=batch1
 # pinebook_lcd_mode=batch2
+# pinebook_lcd_mode=1080p
 
 # Allow to execute user command
 user_cmd=
