@@ -4,7 +4,7 @@ LINUX_DIR := linux
 DTS_DIR := $(LINUX_DIR)/arch/arm64/boot/dts
 REMOTE_HOST ?= pinebook
 
-all: pine64-pinebook pine64-plus pine64-sopine
+all: pine64-pinebook pine64 pine64-plus pine64-sopine
 
 help:
 	# make pine64-pinebook
@@ -152,6 +152,10 @@ pine64-pinebook: \
 		boot/pine64/boot0-pine64-pinebook.bin \
 		boot/pine64/fes1-pine64-pinebook.bin \
 		boot/pine64/u-boot-pine64-pinebook.bin \
+		boot/pine64/sun50i-a64-pine64-pinebook-1080p.dtb \
+		boot/pine64/boot0-pine64-pinebook-1080p.bin \
+		boot/pine64/fes1-pine64-pinebook-1080p.bin \
+		boot/pine64/u-boot-pine64-pinebook-1080p.bin \
 		boot/boot.scr \
 		boot/boot.cmd \
 		boot/uEnv.txt
@@ -161,6 +165,15 @@ pine64-sopine: boot/pine64/sun50i-a64-pine64-sopine.dtb \
 		boot/pine64/boot0-pine64-sopine.bin \
 		boot/pine64/fes1-pine64-sopine.bin \
 		boot/pine64/u-boot-pine64-sopine.bin \
+		boot/boot.scr \
+		boot/boot.cmd \
+		boot/uEnv.txt
+
+.PHONY: pine64
+pine64: boot/pine64/sun50i-a64-pine64.dtb \
+		boot/pine64/boot0-pine64.bin \
+		boot/pine64/fes1-pine64.bin \
+		boot/pine64/u-boot-pine64.bin \
 		boot/boot.scr \
 		boot/boot.cmd \
 		boot/uEnv.txt
