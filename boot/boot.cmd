@@ -133,16 +133,16 @@ elif test "${pinebook_lcd_mode}" = "batch2"; then
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vspw "4"
 elif test "${pinebook_lcd_mode}" = "1080p"; then
 	echo "Fixing LCD parameters to use Pinebook 1080p"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_if "0"
+	#fdt set /soc@01c00000/lcd0@01c0c000 lcd_if "0"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_x "1920"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_y "1080"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "140"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_hbp "100"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "139"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_hbp "112"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_hspw "32"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_ht "2080"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_hspw "30"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vbp "20"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vbp "28"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vspw "5"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vt "1111"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vspw "4"
 fi
 
 # DVI compatibility
