@@ -121,18 +121,19 @@ fi
 # Pinebook LCD
 if test "${pinebook_lcd_mode}" = "batch1"; then
 	echo "Fixing LCD parameters to use Pinebook Batch 1"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "72"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vbp "20"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vt "860"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vspw "5"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "<72>"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vbp "<20>"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vt "<860>"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vspw "<5>"
 elif test "${pinebook_lcd_mode}" = "batch2"; then
 	echo "Fixing LCD parameters to use Pinebook Batch 2"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "77"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vbp "7"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vt "790"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vspw "4"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "<77>"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vbp "<7>"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vt "<790>"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_vspw "<4>"
 elif test "${pinebook_lcd_mode}" = "1080p"; then
 	echo "Fixing LCD parameters to use Pinebook 1080p"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_if "<0>"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_x "<1920>"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_y "<1080>"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "<111>"
