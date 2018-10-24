@@ -135,7 +135,7 @@ elif test "${pinebook_lcd_mode}" = "1080p"; then
 	echo "Fixing LCD parameters to use Pinebook 1080p"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_x "<1920>"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_y "<1080>"
-	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "<138>"
+	fdt set /soc@01c00000/lcd0@01c0c000 lcd_dclk_freq "<111>"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_hbp "<112>"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_hspw "<32>"
 	fdt set /soc@01c00000/lcd0@01c0c000 lcd_ht "<2080>"

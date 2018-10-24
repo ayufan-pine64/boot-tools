@@ -2246,7 +2246,7 @@
 			lcd_y = < 1080 >;
 			lcd_width = < 0x100 >;
 			lcd_height = < 0x90 >;
-			lcd_dclk_freq = < 138 >;
+			lcd_dclk_freq = < 111 >;
 			lcd_pwm_used = < 0x01 >;
 			lcd_pwm_ch = < 0x00 >;
 			lcd_pwm_freq = < 0xc8 >;
