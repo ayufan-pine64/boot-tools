@@ -152,10 +152,10 @@ pine64-pinebook: \
 		boot/pine64/boot0-pine64-pinebook.bin \
 		boot/pine64/fes1-pine64-pinebook.bin \
 		boot/pine64/u-boot-pine64-pinebook.bin \
-		boot/pine64/sun50i-a64-pine64-pinebook-1080p.dtb \
-		boot/pine64/boot0-pine64-pinebook-1080p.bin \
-		boot/pine64/fes1-pine64-pinebook-1080p.bin \
-		boot/pine64/u-boot-pine64-pinebook-1080p.bin \
+		boot/pine64/sun50i-a64-pine64-pinebook1080p.dtb \
+		boot/pine64/boot0-pine64-pinebook1080p.bin \
+		boot/pine64/fes1-pine64-pinebook1080p.bin \
+		boot/pine64/u-boot-pine64-pinebook1080p.bin \
 		boot/boot.scr \
 		boot/boot.cmd \
 		boot/uEnv.txt
