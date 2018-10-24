@@ -6,7 +6,7 @@
 
 [product]
 version = "100"
-machine = "evb"
+machine = "pine64-pinebook"
 
 ;---------------------------------------------------------------------------------------------------------
 ; eraseflag - 1 erase data partition, 0 - do not erase data partition

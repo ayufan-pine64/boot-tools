@@ -4,7 +4,7 @@ LINUX_DIR := linux
 DTS_DIR := $(LINUX_DIR)/arch/arm64/boot/dts
 REMOTE_HOST ?= pinebook
 
-all: pine64-pinebook pine64 pine64-plus pine64-sopine
+all: pine64-pinebook pine64-plus pine64-sopine
 
 help:
 	# make pine64-pinebook
